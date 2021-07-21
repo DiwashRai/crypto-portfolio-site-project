@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.js -e js"
+    "dev": "nodemon src/index.js -e js",
+    "test": "jest --watch --runInBand"
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +13,8 @@
     "express": "^4.17.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.12"
+    "jest": "^27.0.6",
+    "nodemon": "^2.0.12",
+    "supertest": "^6.1.4"
   }
 }
