@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index.js -e js",
-    "test": "jest --watch --runInBand"
+    "dev": "env-cmd -f ./config/dev.env nodemon src/index.js -e js",
+    "test": "env-cmd -f ./config/test.env jest --watch --runInBand"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +14,7 @@
     "mongoose": "^5.13.3"
   },
   "devDependencies": {
+    "env-cmd": "^10.1.0",
     "jest": "^27.0.6",
     "nodemon": "^2.0.12",
     "supertest": "^6.1.4"
