@@ -6,7 +6,7 @@ const app = express();
 const router = new express.Router();
 
 router.get('*', (req, res) => {
-    res.status(404).send({ error: 'Invalid route'});
+  res.status(404).send({ error: 'Invalid route' });
 });
 
 app.use(express.json());

@@ -1,16 +1,17 @@
 const express = require('express');
+
 const userRouter = express.Router();
 
-//POST
+// POST
 userRouter.post('/users', (req, res) => {
-    console.log('/users route hit!');
-    res.status(200).send();
+  console.log('/users route hit!');
+  res.status(200).send();
 });
 
-//GET
+// GET
 
-//PATCH
+// PATCH
 
-//DELETE
+// DELETE
 
 module.exports = userRouter;
