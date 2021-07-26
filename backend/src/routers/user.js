@@ -27,18 +27,26 @@ userRouter.post('/users/login', async (req, res) => {
   }
 });
 
+userRouter.post('/users/logout', async () => {
+  try {
+    // TODO: implement
+  } catch (err) {
+    // TODO: implement
+  }
+});
+
 // GET
-userRouter.get('/users', (req, res) => {
+userRouter.get('/users/me', (req, res) => {
   res.status(200).send();
 });
 
 // PATCH
-userRouter.patch('/users', (req, res) => {
+userRouter.patch('/users/me', (req, res) => {
   res.status(200).send();
 });
 
 // DELETE
-userRouter.delete('/users', (req, res) => {
+userRouter.delete('/users/me', (req, res) => {
   res.status(200).send();
 });
 

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const request = require('supertest');
 const app = require('../src/app');
 const User = require('../src/models/user');
-const { userOne, setupDatabase } = require('./fixtures/test-data');
+const { userOneId, userOne, setupDatabase } = require('./fixtures/test-data');
 
 beforeEach(setupDatabase);
 
@@ -45,16 +45,18 @@ test('Should login successfully with correct credentials', async () => {
   expect(response.body.password).toBeFalsy();
 
   // TODO: token assert tests when implemented
+  const user = User.findById(userOneId);
+  expect(response.body.token).toBe(user.tokens[1].token);
 });
 
-test('/users get route', async () => {
-  const response = await request(app).get('/users').expect(200);
+test('/users/me get route', async () => {
+  const response = await request(app).get('/users/me').expect(200);
 });
 
 test('/users patch route', async () => {
-  const response = await request(app).patch('/users').expect(200);
+  const response = await request(app).patch('/users/me').expect(200);
 });
 
 test('/users delete route', async () => {
-  const response = await request(app).delete('/users').expect(200);
+  const response = await request(app).delete('/users/me').expect(200);
 });
