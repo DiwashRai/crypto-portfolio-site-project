@@ -10,8 +10,20 @@ userRouter.post('/users', async (req, res) => {
   try {
     await user.save();
     res.status(201).send(user);
-  } catch (e) {
-    res.status(400).send(e);
+  } catch (err) {
+    res.status(400).send(err);
+  }
+});
+
+userRouter.post('/users/login', async (req, res) => {
+  try {
+    const user = await User.findByCredentials(
+      req.body.email,
+      req.body.password
+    );
+    res.status(200).send(user);
+  } catch (err) {
+    res.status(400).send();
   }
 });
 

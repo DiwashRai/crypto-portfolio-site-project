@@ -32,6 +32,21 @@ test('Should sign up new user', async () => {
   expect(user.password).not.toBe('iamyourfather');
 });
 
+test('Should login successfully with correct credentials', async () => {
+  const response = await request(app)
+    .post('/users/login')
+    .send({
+      email: userOne.email,
+      password: userOne.password,
+    })
+    .expect(200);
+
+  // make sure password is removed from response
+  expect(response.body.password).toBeFalsy();
+
+  // TODO: token assert tests when implemented
+});
+
 test('/users get route', async () => {
   const response = await request(app).get('/users').expect(200);
 });
