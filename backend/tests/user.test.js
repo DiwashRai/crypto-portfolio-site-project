@@ -22,10 +22,13 @@ test('Should sign up new user', async () => {
   const user = await User.findById(userId);
   expect(user).not.toBeNull();
 
-  // Assert that the response contains the correct user details
+  // Assert that the response contains the correct user details and a token
   expect(response.body).toMatchObject({
-    name: 'Vader',
-    email: 'vader@deathstar.com',
+    user: {
+      name: 'Vader',
+      email: 'vader@deathstar.com',
+    },
+    token: user.tokens[0].token,
   });
 
   // Assert that the password is not stored without hashing
@@ -44,13 +47,31 @@ test('Should login successfully with correct credentials', async () => {
   // make sure password is removed from response
   expect(response.body.password).toBeFalsy();
 
-  // TODO: token assert tests when implemented
-  const user = User.findById(userOneId);
+  // check the jwt token is created and sent in the response
+  const user = await User.findById(userOneId);
   expect(response.body.token).toBe(user.tokens[1].token);
 });
 
+test('Should logout currently logged in user', async () => {
+  const response = await request(app)
+    .post('/users/logout')
+    .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+    .send()
+    .expect(200);
+});
+
 test('/users/me get route', async () => {
-  const response = await request(app).get('/users/me').expect(200);
+  const response = await request(app)
+    .get('/users/me')
+    .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+    .send()
+    .expect(200);
+
+  expect(response.body).toMatchObject({
+    _id: userOneId.toHexString(),
+    name: userOne.name,
+    email: userOne.email,
+  });
 });
 
 test('/users patch route', async () => {

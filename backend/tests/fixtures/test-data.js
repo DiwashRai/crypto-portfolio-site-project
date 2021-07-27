@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const User = require('../../src/models/user');
 
@@ -7,6 +8,13 @@ const userOne = {
   name: 'Luke',
   email: 'luke@testing.com',
   password: 'usetheforce',
+  tokens: [
+    {
+      token: jwt.sign({ _id: userOneId.toString() }, process.env.JWT_SECRET, {
+        expiresIn: '24h',
+      }),
+    },
+  ],
 };
 
 const userTwoId = new mongoose.Types.ObjectId();
@@ -15,6 +23,13 @@ const userTwo = {
   name: 'HanSolo',
   email: 'han@testing.com',
   password: 'handyhan',
+  tokens: [
+    {
+      token: jwt.sign({ _id: userOneId.toString() }, process.env.JWT_SECRET, {
+        expiresIn: '24h',
+      }),
+    },
+  ],
 };
 
 const setupDatabase = async () => {
