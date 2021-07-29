@@ -19,7 +19,7 @@ tradeRouter.patch('/trades', async (req, res) => {
 });
 
 // DELETE
-tradeRouter.delete('/delete', async (req, res) => {
+tradeRouter.delete('/trades', async (req, res) => {
   res.status(200).send();
 });
 
