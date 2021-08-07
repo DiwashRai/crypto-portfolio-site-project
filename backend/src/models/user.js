@@ -30,6 +30,19 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
+    balance: [
+      {
+        _id: false,
+        symbol: {
+          type: String,
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

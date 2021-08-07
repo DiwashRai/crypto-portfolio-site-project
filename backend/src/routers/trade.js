@@ -1,16 +1,28 @@
 const express = require('express');
 const Trade = require('../models/trade');
+const auth = require('../middleware/auth');
 
 const tradeRouter = express.Router();
 
 // POST
-tradeRouter.post('/trades', async (req, res) => {
-  res.status(200).send();
+tradeRouter.post('/trades', auth, async (req, res) => {
+  const trade = new Trade({
+    ...req.body,
+    owner: req.user._id,
+  });
+
+  try {
+    await trade.save();
+    res.status(201).send();
+  } catch (err) {
+    res.status(400).send();
+  }
 });
 
 // GET
-tradeRouter.get('/trades', async (req, res) => {
-  res.status(200).send();
+tradeRouter.get('/trades', auth, async (req, res) => {
+  const usersTrades = await Trade.find({ owner: req.user._id });
+  res.status(200).send(usersTrades);
 });
 
 // PATCH

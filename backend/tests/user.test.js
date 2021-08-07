@@ -35,6 +35,17 @@ test('Should sign up new user', async () => {
   expect(user.password).not.toBe('iamyourfather');
 });
 
+test('Should reject sign up with an email that is already in use', async () => {
+  await request(app)
+    .post('/users')
+    .send({
+      name: 'NotHan',
+      email: 'han@testing.com',
+      password: 'notTheSame',
+    })
+    .expect(400);
+});
+
 test('Should login successfully with correct credentials', async () => {
   const response = await request(app)
     .post('/users/login')
@@ -71,6 +82,20 @@ test('/users/me get route', async () => {
     _id: userOneId.toHexString(),
     name: userOne.name,
     email: userOne.email,
+    balance: [
+      {
+        symbol: 'USD',
+        quantity: 100,
+      },
+      {
+        symbol: 'ETH',
+        quantity: 2,
+      },
+      {
+        symbol: 'BTC',
+        quantity: 0.15,
+      },
+    ],
   });
 });
 
