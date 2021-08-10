@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const tradeSchema = new mongoose.Schema(
+const TradeSchema = new mongoose.Schema(
   {
     owner: {
       type: mongoose.Schema.Types.ObjectId,
@@ -41,7 +41,7 @@ const tradeSchema = new mongoose.Schema(
   }
 );
 
-tradeSchema.pre('save', async function (next) {
+TradeSchema.pre('save', async function (next) {
   const trade = this;
   trade.total = trade.cost;
   if (trade.fee) trade.total += trade.fee;
@@ -50,6 +50,6 @@ tradeSchema.pre('save', async function (next) {
   next();
 });
 
-const Trade = mongoose.model('Trade', tradeSchema);
+const TradeModel = mongoose.model('Trade', TradeSchema);
 
-module.exports = Trade;
+module.exports = TradeModel;

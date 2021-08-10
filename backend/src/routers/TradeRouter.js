@@ -1,12 +1,12 @@
 const express = require('express');
-const Trade = require('../models/trade');
+const TradeModel = require('../models/TradeModel');
 const auth = require('../middleware/auth');
 
-const tradeRouter = express.Router();
+const TradeRouter = express.Router();
 
 // POST
 tradeRouter.post('/trades', auth, async (req, res) => {
-  const trade = new Trade({
+  const trade = new TradeModel({
     ...req.body,
     owner: req.user._id,
   });
@@ -21,7 +21,7 @@ tradeRouter.post('/trades', auth, async (req, res) => {
 
 // GET
 tradeRouter.get('/trades', auth, async (req, res) => {
-  const usersTrades = await Trade.find({ owner: req.user._id });
+  const usersTrades = await TradeModel.find({ owner: req.user._id });
   res.status(200).send(usersTrades);
 });
 
@@ -35,4 +35,4 @@ tradeRouter.delete('/trades', async (req, res) => {
   res.status(200).send();
 });
 
-module.exports = tradeRouter;
+module.exports = TradeRouter;
