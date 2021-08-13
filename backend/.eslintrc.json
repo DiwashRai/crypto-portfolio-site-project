@@ -11,6 +11,8 @@
   },
   "rules": {
     "prettier/prettier": "error",
-    "no-console": "off"
+    "no-console": "off",
+    "no-underscore-dangle": [2, { "allow": ["_id"] }],
+    "no-use-before-define": "off"
   }
 }

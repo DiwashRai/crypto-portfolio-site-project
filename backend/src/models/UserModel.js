@@ -49,7 +49,7 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-UserSchema.pre('save', async function (next) {
+UserSchema.pre('save', async function pre(next) {
   const user = this;
 
   if (user.isModified('password')) {
@@ -60,7 +60,7 @@ UserSchema.pre('save', async function (next) {
 });
 
 UserSchema.statics.findByCredentials = async (email, password) => {
-  const user = await User.findOne({ email });
+  const user = await UserModel.findOne({ email });
 
   if (!user) {
     throw new Error('Unable to login');
@@ -74,7 +74,7 @@ UserSchema.statics.findByCredentials = async (email, password) => {
   return user;
 };
 
-UserSchema.methods.generateAuthToken = async function () {
+UserSchema.methods.generateAuthToken = async function generateAuthToken() {
   const user = this;
 
   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
@@ -86,7 +86,7 @@ UserSchema.methods.generateAuthToken = async function () {
   return token;
 };
 
-UserSchema.methods.toJSON = function () {
+UserSchema.methods.toJSON = function toJSON() {
   const user = this;
   const userObject = user.toObject();
 

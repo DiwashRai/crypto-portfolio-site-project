@@ -5,7 +5,7 @@ const auth = require('../middleware/auth');
 const TradeRouter = express.Router();
 
 // POST
-tradeRouter.post('/trades', auth, async (req, res) => {
+TradeRouter.post('/trades', auth, async (req, res) => {
   const trade = new TradeModel({
     ...req.body,
     owner: req.user._id,
@@ -20,18 +20,18 @@ tradeRouter.post('/trades', auth, async (req, res) => {
 });
 
 // GET
-tradeRouter.get('/trades', auth, async (req, res) => {
+TradeRouter.get('/trades', auth, async (req, res) => {
   const usersTrades = await TradeModel.find({ owner: req.user._id });
   res.status(200).send(usersTrades);
 });
 
 // PATCH
-tradeRouter.patch('/trades', async (req, res) => {
+TradeRouter.patch('/trades', async (req, res) => {
   res.status(200).send();
 });
 
 // DELETE
-tradeRouter.delete('/trades', async (req, res) => {
+TradeRouter.delete('/trades', async (req, res) => {
   res.status(200).send();
 });
 

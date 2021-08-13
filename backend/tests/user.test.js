@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const request = require('supertest');
 const app = require('../src/app');
-const User = require('../src/models/user');
+const User = require('../src/models/UserModel');
 const { userOneId, userOne, setupDatabase } = require('./fixtures/test-data');
 
 beforeEach(setupDatabase);

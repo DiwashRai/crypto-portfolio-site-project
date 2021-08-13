@@ -41,7 +41,7 @@ const TradeSchema = new mongoose.Schema(
   }
 );
 
-TradeSchema.pre('save', async function (next) {
+TradeSchema.pre('save', async function pre(next) {
   const trade = this;
   trade.total = trade.cost;
   if (trade.fee) trade.total += trade.fee;
