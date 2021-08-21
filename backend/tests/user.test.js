@@ -71,7 +71,7 @@ test('Should logout currently logged in user', async () => {
     .expect(200);
 });
 
-test('/users/me get route', async () => {
+test('Should return the authorized users correct details', async () => {
   const response = await request(app)
     .get('/users/me')
     .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
@@ -84,16 +84,20 @@ test('/users/me get route', async () => {
     email: userOne.email,
     balance: [
       {
-        symbol: 'USD',
-        quantity: 100,
-      },
-      {
-        symbol: 'ETH',
-        quantity: 2,
+        symbol: 'ADA',
+        quantity: 200,
       },
       {
         symbol: 'BTC',
-        quantity: 0.15,
+        quantity: 0.1,
+      },
+      {
+        symbol: 'ETH',
+        quantity: 0.5,
+      },
+      {
+        symbol: 'USD',
+        quantity: -4040,
       },
     ],
   });

@@ -18,16 +18,20 @@ const userOne = {
   ],
   balance: [
     {
-      symbol: 'USD',
-      quantity: 100.0,
-    },
-    {
-      symbol: 'ETH',
-      quantity: 2.0,
+      symbol: 'ADA',
+      quantity: 200,
     },
     {
       symbol: 'BTC',
-      quantity: 0.15,
+      quantity: 0.1,
+    },
+    {
+      symbol: 'ETH',
+      quantity: 0.5,
+    },
+    {
+      symbol: 'USD',
+      quantity: -4040,
     },
   ],
 };
@@ -40,25 +44,28 @@ const userTwo = {
   password: 'handyhan',
   tokens: [
     {
-      token: jwt.sign({ _id: userOneId.toString() }, process.env.JWT_SECRET, {
+      token: jwt.sign({ _id: userTwoId.toString() }, process.env.JWT_SECRET, {
         expiresIn: '24h',
       }),
     },
   ],
-  balance: [
+  balance: [],
+};
+
+const userThreeId = new mongoose.Types.ObjectId();
+const userThree = {
+  _id: userThreeId,
+  name: 'Leia',
+  email: 'leia@testing.com',
+  password: 'princess',
+  tokens: [
     {
-      symbol: 'USD',
-      quantity: 50.0,
-    },
-    {
-      symbol: 'ETH',
-      quantity: 0.8,
-    },
-    {
-      symbol: 'BTC',
-      quantity: 0.35,
+      token: jwt.sign({ _id: userThreeId.toString() }, process.env.JWT_SECRET, {
+        expiresIn: '24h',
+      }),
     },
   ],
+  balance: [],
 };
 
 const tradeOne = {
@@ -98,6 +105,7 @@ const setupDatabase = async () => {
   await Trade.deleteMany();
   await new User(userOne).save();
   await new User(userTwo).save();
+  await new User(userThree).save();
   await new Trade(tradeOne).save();
   await new Trade(tradeTwo).save();
   await new Trade(tradeThree).save();
@@ -109,5 +117,7 @@ module.exports = {
   userOne,
   userTwo,
   userTwoId,
+  userThreeId,
+  userThree,
   setupDatabase,
 };
