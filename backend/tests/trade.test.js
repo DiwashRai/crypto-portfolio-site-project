@@ -7,7 +7,11 @@ const {
   userOneId,
   userOne,
   userThreeId,
+  userTwo,
   userThree,
+
+  tradeFourId,
+  tradeFour,
   setupDatabase,
 } = require('./fixtures/test-data');
 
@@ -65,10 +69,71 @@ test('Should retrieve logged in users trades', async () => {
   expect(response.body.length).toEqual(3);
 });
 
-test('/trades patch route', async () => {
-  const response = await request(app).patch('/trades').expect(200);
+test('Should retrieve specific trade by specifying ID', async () => {
+  const response = await request(app)
+    .get(`/trades/${tradeFourId}`)
+    .set('Authorization', `Bearer ${userTwo.tokens[0].token}`)
+    .expect(200);
+
+  const trade = await TradeModel.findById(tradeFourId);
+  expect(response.body).toMatchObject({
+    _id: tradeFourId.toHexString(),
+    tradeDate: trade.tradeDate,
+    symbol: trade.symbol,
+    quantity: trade.quantity,
+    cost: trade.cost,
+    total: trade.total,
+    price: trade.price,
+  });
 });
 
-test('/trades delete route', async () => {
-  const response = await request(app).delete('/trades').expect(200);
+test('Should allow authorized user to update trade details', async () => {
+  tradeFour.symbol = 'BTC';
+  tradeFour.quantity = 0.1;
+  tradeFour.fee = 3;
+  const response = await request(app)
+    .patch(`/trades/${tradeFourId}`)
+    .set('Authorization', `Bearer ${userTwo.tokens[0].token}`)
+    .send({
+      symbol: tradeFour.symbol,
+      quantity: tradeFour.quantity,
+      fee: tradeFour.fee,
+    })
+    .expect(200);
+
+  expect(response.body).toMatchObject({
+    _id: tradeFourId.toHexString(),
+    symbol: tradeFour.symbol,
+    quantity: tradeFour.quantity,
+    fee: tradeFour.fee,
+  });
+});
+
+// TODO: add test to make sure fields that are not allowed cannot be updated
+
+test('Should allow user to delete their own trade', async () => {
+  // check that the trade exists first
+  let trade = await TradeModel.findById(tradeFourId);
+  expect(trade).not.toBeNull();
+
+  const response = await request(app)
+    .delete(`/trades/${tradeFourId}`)
+    .set('Authorization', `Bearer ${userTwo.tokens[0].token}`)
+    .expect(200);
+
+  // check that the response body contains correct trade details
+  expect(response.body).toMatchObject({
+    _id: tradeFourId.toHexString(),
+    tradeDate: trade.tradeDate,
+    symbol: trade.symbol,
+    quantity: trade.quantity,
+    cost: trade.cost,
+    fee: trade.fee,
+    total: trade.total,
+    price: trade.price,
+  });
+
+  // check that the trade has been deleted from the database
+  trade = await TradeModel.findById(tradeFourId);
+  expect(trade).toBeNull();
 });

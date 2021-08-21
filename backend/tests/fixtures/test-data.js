@@ -92,7 +92,9 @@ const tradeThree = {
   cost: 240,
 };
 
+const tradeFourId = new mongoose.Types.ObjectId();
 const tradeFour = {
+  _id: tradeFourId,
   owner: userTwoId,
   tradeDate: '10-01-21',
   symbol: 'DOT',
@@ -119,5 +121,7 @@ module.exports = {
   userTwoId,
   userThreeId,
   userThree,
+  tradeFourId,
+  tradeFour,
   setupDatabase,
 };
