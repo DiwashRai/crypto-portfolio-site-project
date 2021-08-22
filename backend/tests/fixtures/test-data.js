@@ -49,7 +49,16 @@ const userTwo = {
       }),
     },
   ],
-  balance: [],
+  balance: [
+    {
+      symbol: 'DOT',
+      quantity: 300,
+    },
+    {
+      symbol: 'USD',
+      quantity: -300,
+    },
+  ],
 };
 
 const userThreeId = new mongoose.Types.ObjectId();
@@ -68,7 +77,9 @@ const userThree = {
   balance: [],
 };
 
+const tradeOneId = new mongoose.Types.ObjectId();
 const tradeOne = {
+  _id: tradeOneId,
   owner: userOneId,
   tradeDate: '20-02-21',
   symbol: 'ETH',
@@ -76,7 +87,9 @@ const tradeOne = {
   cost: 800,
 };
 
+const tradeTwoId = new mongoose.Types.ObjectId();
 const tradeTwo = {
+  _id: tradeTwoId,
   owner: userOneId,
   tradeDate: '10-01-21',
   symbol: 'BTC',
@@ -84,7 +97,9 @@ const tradeTwo = {
   cost: 3000,
 };
 
+const tradeThreeId = new mongoose.Types.ObjectId();
 const tradeThree = {
+  _id: tradeThreeId,
   owner: userOneId,
   tradeDate: '30-03-21',
   symbol: 'ADA',
@@ -121,6 +136,12 @@ module.exports = {
   userTwoId,
   userThreeId,
   userThree,
+  tradeOneId,
+  tradeOne,
+  tradeTwoId,
+  tradeTwo,
+  tradeThreeId,
+  tradeThree,
   tradeFourId,
   tradeFour,
   setupDatabase,

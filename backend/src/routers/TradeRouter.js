@@ -15,7 +15,7 @@ TradeRouter.post('/trades', auth, async (req, res) => {
   try {
     await trade.save();
     const coinBalance = req.user.balance.find(
-      (element) => element.symbol === 'ETH'
+      (element) => element.symbol === trade.symbol
     );
     const USDBalance = req.user.balance.find(
       (element) => element.symbol === 'USD'
@@ -77,11 +77,12 @@ TradeRouter.patch('/trades/:id', auth, async (req, res) => {
   );
 
   if (!isValidOperation) {
-    return res.status(400).send({ error: 'Invalid updates!' });
+    res.status(400).send({ error: 'Invalid updates!' });
+    return;
   }
 
   try {
-    const trade = await TradeModel.findOne({
+    let trade = await TradeModel.findOne({
       _id: req.params.id,
       owner: req.user._id,
     });
@@ -89,11 +90,24 @@ TradeRouter.patch('/trades/:id', auth, async (req, res) => {
     if (!trade) {
       res.status(404).send();
     }
+    const originalQuantity = trade.quantity;
+    const originalTotal = trade.total;
+    const coinBalance = req.user.balance.find(
+      (element) => element.symbol === trade.symbol
+    );
+    const USDBalance = req.user.balance.find(
+      (element) => element.symbol === 'USD'
+    );
 
     updates.forEach((update) => {
       trade[update] = req.body[update];
     });
-    await trade.save();
+    trade = await trade.save();
+
+    coinBalance.quantity += trade.quantity - originalQuantity;
+    USDBalance.quantity -= trade.total - originalTotal;
+    await req.user.save();
+
     res.status(200).send(trade);
   } catch (e) {
     res.status(400).send();
@@ -110,6 +124,16 @@ TradeRouter.delete('/trades/:id', auth, async (req, res) => {
     if (!trade) {
       res.status(404).send();
     }
+    const coinBalance = req.user.balance.find(
+      (element) => element.symbol === trade.symbol
+    );
+    const USDBalance = req.user.balance.find(
+      (element) => element.symbol === 'USD'
+    );
+    coinBalance.quantity -= trade.quantity;
+    USDBalance.quantity += trade.total;
+
+    await req.user.save();
     res.status(200).send(trade);
   } catch (e) {
     res.status(500).send();
