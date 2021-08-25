@@ -1,12 +1,14 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 require('./db/mongoose');
 const UserRouter = require('./routers/UserRouter');
 const TradeRouter = require('./routers/TradeRouter');
 
 const app = express();
 
-app.use(cors({ origin: '*' }));
+app.use(cors({ origin: true, credentials: true }));
+app.use(cookieParser());
 app.use(express.json());
 app.use(UserRouter);
 app.use(TradeRouter);

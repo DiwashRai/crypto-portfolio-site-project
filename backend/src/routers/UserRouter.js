@@ -24,6 +24,7 @@ UserRouter.post('/users/login', async (req, res) => {
       req.body.password
     );
     const token = await user.generateAuthToken();
+    res.cookie('token', token, { httpOnly: true });
     res.status(200).send({ user, token });
   } catch (err) {
     res.status(400).send();
