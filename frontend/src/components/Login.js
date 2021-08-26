@@ -11,7 +11,7 @@ export default class Login extends React.Component {
     console.log('clicked');
     const email = event.target.elements.email.value.trim();
     const password = event.target.elements.password.value;
-    this.getData('http://localhost:3000/users/login', email, password);
+    this.getData(`${REACT_APP_API_URL}/users/login`, email, password);
   };
   getData(url, email, password) {
     fetch(url, {
@@ -42,7 +42,7 @@ export default class Login extends React.Component {
   getTradesWithCookie = () => {};
   getTrades = () => {
     console.log(this.state.token);
-    fetch('http://localhost:3000/trades', {
+    fetch(`${REACT_APP_API_URL}/trades`, {
       method: 'GET',
       credentials: 'include',
     })
@@ -74,7 +74,7 @@ export default class Login extends React.Component {
         </form>
         <button onClick={this.getTrades}>Get Trades</button>
         {this.state.error && <p>{this.state.error}</p>}
-        {this.state.data && <p>{JSON.stringify(this.state.data.user)}</p>}
+        {this.state.data && <p>{JSON.stringify(this.state.data)}</p>}
       </div>
     );
   }

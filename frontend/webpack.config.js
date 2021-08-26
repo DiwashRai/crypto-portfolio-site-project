@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   entry: './src/app.js',
@@ -19,6 +20,15 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      REACT_APP_API_URL: JSON.stringify(
+        'https://diwashrai-crypto-backend.herokuapp.com'
+        // 'http://62.30.13.3:3000'
+        // 'http://localhost:3000'
+      ),
+    }),
+  ],
   devtool: 'eval-cheap-module-source-map',
   devServer: {
     static: path.join(__dirname, 'public'),
