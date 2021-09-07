@@ -1,7 +1,15 @@
 import React from 'react';
+import UserBalanceList from './UserBalanceList';
+import TradesList from './TradesList';
 
-export default class Dashboard extends React.Component {
-  render() {
-    return <div>This is my Dashboard page.</div>;
-  }
-}
+const Dashboard = (props) => {
+  return (
+    <div>
+      <h1>Dashboard</h1>
+      <UserBalanceList />
+      <TradesList />
+    </div>
+  );
+};
+
+export default Dashboard;

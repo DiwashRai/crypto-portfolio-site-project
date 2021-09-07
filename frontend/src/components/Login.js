@@ -1,81 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { handleLogin } from '../actions/authenticationActions';
 
-export default class Login extends React.Component {
-  state = {
-    data: undefined,
-    token: undefined,
-    error: undefined,
+const Login = (props) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  return (
+    <div>
+      <h1>Sign in</h1>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          props.dispatch(handleLogin(email, password));
+        }}
+      >
+        <input
+          type="text"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button type="submit">Sign in</button>
+      </form>
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          console.log(props.authentication);
+        }}
+      >
+        Check state
+      </button>
+    </div>
+  );
+};
+
+const mapStateToProps = (state) => {
+  return {
+    authentication: state.authentication,
   };
-  handleLogin = (event) => {
-    event.preventDefault();
-    console.log('clicked');
-    const email = event.target.elements.email.value.trim();
-    const password = event.target.elements.password.value;
-    this.getData(`${REACT_APP_API_URL}/users/login`, email, password);
-  };
-  getData(url, email, password) {
-    fetch(url, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        this.setState((prevState) => ({
-          data: result.user,
-          token: result.token,
-        }));
-        console.log(result);
-      })
-      .catch((err) => {
-        this.setState((prevState) => ({
-          error: 'Invalid/Incorrect credentials entered',
-        }));
-      });
-  }
-  getTradesWithCookie = () => {};
-  getTrades = () => {
-    console.log(this.state.token);
-    fetch(`${REACT_APP_API_URL}/trades`, {
-      method: 'GET',
-      credentials: 'include',
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        if (!result.error) {
-          this.setState((prevState) => ({
-            data: result,
-          }));
-        } else {
-          this.setState((prevState) => ({
-            error: result.error,
-          }));
-        }
-        console.log(result);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  render() {
-    return (
-      <div>
-        This is my login page.
-        <form onSubmit={this.handleLogin}>
-          <input type="text" name="email" placeholder="email" />
-          <input type="text" name="password" placeholder="password" />
-          <button>Login</button>
-        </form>
-        <button onClick={this.getTrades}>Get Trades</button>
-        {this.state.error && <p>{this.state.error}</p>}
-        {this.state.data && <p>{JSON.stringify(this.state.data)}</p>}
-      </div>
-    );
-  }
-}
+};
+
+export default connect(mapStateToProps)(Login);
