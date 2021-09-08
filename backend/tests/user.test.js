@@ -84,7 +84,7 @@ test('Should return the authorized users correct details', async () => {
     email: userOne.email,
     currencyBalance: [
       {
-        currencyId: 'USA Dollar',
+        currencySymbol: 'usd',
         quantity: -4040,
       },
     ],

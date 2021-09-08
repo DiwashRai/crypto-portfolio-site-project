@@ -59,7 +59,7 @@ test('Should update users balance when trade is added', async () => {
     (element) => element.coinId === 'ethereum'
   );
   let USDBalance = user.currencyBalance.find(
-    (element) => element.currencyId === 'USA Dollar'
+    (element) => element.currencySymbol === 'usd'
   );
   expect(ethereumBalance.quantity).toBe(1.5);
   expect(USDBalance.quantity).toBe(-2700);
@@ -80,7 +80,7 @@ test('Should update users balance when trade is added', async () => {
     (element) => element.coinId === 'bitcoin'
   );
   USDBalance = user.currencyBalance.find(
-    (element) => element.currencyId === 'USA Dollar'
+    (element) => element.currencySymbol === 'usd'
   );
   expect(bitcoinBalance.quantity).toBe(0.1);
   expect(USDBalance.quantity).toBe(-6700);
@@ -167,7 +167,7 @@ test('Should update the users balance when trades are updated', async () => {
     (element) => element.coinId === 'cardano'
   );
   let USDBalance = user.currencyBalance.find(
-    (element) => element.currencyId === 'USA Dollar'
+    (element) => element.currencySymbol === 'usd'
   );
   let bitcoinBalance = user.coinBalance.find(
     (element) => element.coinId === 'bitcoin'
@@ -191,7 +191,7 @@ test('Should update the users balance when trades are updated', async () => {
     (element) => element.coinId === 'cardano'
   );
   USDBalance = user.currencyBalance.find(
-    (element) => element.currencyId === 'USA Dollar'
+    (element) => element.currencySymbol === 'usd'
   );
   expect(cardanoBalance.quantity).toBe(100);
   expect(USDBalance.quantity).toBe(-40123);
@@ -211,7 +211,7 @@ test('Should update the users balance when trades are updated', async () => {
     (element) => element.coinId === 'bitcoin'
   );
   USDBalance = user.currencyBalance.find(
-    (element) => element.currencyId === 'USA Dollar'
+    (element) => element.currencySymbol === 'usd'
   );
   expect(bitcoinBalance.quantity).toBe(0.5);
   expect(USDBalance.quantity).toBe(-21143);
@@ -257,7 +257,7 @@ test('Deleting trades should update the users balance', async () => {
     (element) => element.coinId === 'cardano'
   );
   const USDBalance = user.currencyBalance.find(
-    (element) => element.currencyId === 'USA Dollar'
+    (element) => element.currencySymbol === 'usd'
   );
 
   let response = await request(app)
@@ -273,7 +273,7 @@ test('Deleting trades should update the users balance', async () => {
     ethereumBalance.quantity - response.body.quantity
   );
   balance = user.currencyBalance.find(
-    (element) => element.currencyId === 'USA Dollar'
+    (element) => element.currencySymbol === 'usd'
   );
   expect(balance.quantity).toBe(USDBalance.quantity + response.body.total);
   USDBalance.quantity += response.body.total;
@@ -289,7 +289,7 @@ test('Deleting trades should update the users balance', async () => {
     bitcoinBalance.quantity - response.body.quantity
   );
   balance = user.currencyBalance.find(
-    (element) => element.currencyId === 'USA Dollar'
+    (element) => element.currencySymbol === 'usd'
   );
   expect(balance.quantity).toBe(USDBalance.quantity + response.body.total);
   USDBalance.quantity += response.body.total;
@@ -305,7 +305,7 @@ test('Deleting trades should update the users balance', async () => {
     cardanoBalance.quantity - response.body.quantity
   );
   balance = user.currencyBalance.find(
-    (element) => element.currencyId === 'USA Dollar'
+    (element) => element.currencySymbol === 'usd'
   );
   expect(balance.quantity).toBe(USDBalance.quantity + response.body.total);
 });

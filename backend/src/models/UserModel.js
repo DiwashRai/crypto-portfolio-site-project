@@ -33,7 +33,7 @@ const UserSchema = new mongoose.Schema(
     currencyBalance: [
       {
         _id: false,
-        currencyId: {
+        currencySymbol: {
           type: String,
           required: true,
         },

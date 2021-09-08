@@ -17,7 +17,7 @@ TradeRouter.post('/trades', auth, async (req, res) => {
       (element) => element.coinId === trade.coinId
     );
     const USDBalance = req.user.currencyBalance.find(
-      (element) => element.currencyId === 'USA Dollar'
+      (element) => element.currencySymbol === 'usd'
     );
 
     if (coinBalance) {
@@ -33,7 +33,7 @@ TradeRouter.post('/trades', auth, async (req, res) => {
       USDBalance.quantity -= trade.total;
     } else {
       req.user.currencyBalance.push({
-        currencyId: 'USA Dollar',
+        currencySymbol: 'usd',
         quantity: -trade.total,
       });
     }
@@ -99,7 +99,7 @@ TradeRouter.patch('/trades/:id', auth, async (req, res) => {
       (element) => element.coinId === trade.coinId
     );
     const USDBalance = req.user.currencyBalance.find(
-      (element) => element.currencyId === 'USA Dollar'
+      (element) => element.currencySymbol === 'usd'
     );
 
     updates.forEach((update) => {
@@ -131,7 +131,7 @@ TradeRouter.delete('/trades/:id', auth, async (req, res) => {
       (element) => element.coinId === trade.coinId
     );
     const USDBalance = req.user.currencyBalance.find(
-      (element) => element.currencyId === 'USA Dollar'
+      (element) => element.currencySymbol === 'usd'
     );
     coinBalance.quantity -= trade.quantity;
     USDBalance.quantity += trade.total;

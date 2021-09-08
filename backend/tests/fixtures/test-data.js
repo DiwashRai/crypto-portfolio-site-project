@@ -18,7 +18,7 @@ const userOne = {
   ],
   currencyBalance: [
     {
-      currencyId: 'USA Dollar',
+      currencySymbol: 'usd',
       quantity: -4040,
     },
   ],
@@ -53,7 +53,7 @@ const userTwo = {
   ],
   currencyBalance: [
     {
-      currencyId: 'USA Dollar',
+      currencySymbol: 'usd',
       quantity: -300,
     },
   ],
