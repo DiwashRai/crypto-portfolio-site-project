@@ -1,6 +1,5 @@
 const express = require('express');
 const TradeModel = require('../models/TradeModel');
-const UserModel = require('../models/UserModel');
 const auth = require('../middleware/auth');
 
 const TradeRouter = express.Router();
@@ -14,18 +13,18 @@ TradeRouter.post('/trades', auth, async (req, res) => {
 
   try {
     await trade.save();
-    const coinBalance = req.user.balance.find(
-      (element) => element.symbol === trade.symbol
+    const coinBalance = req.user.coinBalance.find(
+      (element) => element.coinId === trade.coinId
     );
-    const USDBalance = req.user.balance.find(
-      (element) => element.symbol === 'USD'
+    const USDBalance = req.user.currencyBalance.find(
+      (element) => element.currencyId === 'USA Dollar'
     );
 
     if (coinBalance) {
       coinBalance.quantity += trade.quantity;
     } else {
-      req.user.balance.push({
-        symbol: trade.symbol,
+      req.user.coinBalance.push({
+        coinId: trade.coinId,
         quantity: trade.quantity,
       });
     }
@@ -33,8 +32,8 @@ TradeRouter.post('/trades', auth, async (req, res) => {
     if (USDBalance) {
       USDBalance.quantity -= trade.total;
     } else {
-      req.user.balance.push({
-        symbol: 'USD',
+      req.user.currencyBalance.push({
+        currencyId: 'USA Dollar',
         quantity: -trade.total,
       });
     }
@@ -48,8 +47,12 @@ TradeRouter.post('/trades', auth, async (req, res) => {
 
 // GET
 TradeRouter.get('/trades', auth, async (req, res) => {
-  const usersTrades = await TradeModel.find({ owner: req.user._id });
-  res.status(200).send(usersTrades);
+  try {
+    const usersTrades = await TradeModel.find({ owner: req.user._id });
+    res.status(200).send(usersTrades);
+  } catch (e) {
+    res.status(400).send();
+  }
 });
 
 TradeRouter.get('/trades/:id', auth, async (req, res) => {
@@ -71,7 +74,7 @@ TradeRouter.get('/trades/:id', auth, async (req, res) => {
 // PATCH
 TradeRouter.patch('/trades/:id', auth, async (req, res) => {
   const updates = Object.keys(req.body);
-  const allowedUpdate = ['tradeDate', 'symbol', 'quantity', 'cost', 'fee'];
+  const allowedUpdate = ['tradeDate', 'coinId', 'quantity', 'cost', 'fee'];
   const isValidOperation = updates.every((update) =>
     allowedUpdate.includes(update)
   );
@@ -92,11 +95,11 @@ TradeRouter.patch('/trades/:id', auth, async (req, res) => {
     }
     const originalQuantity = trade.quantity;
     const originalTotal = trade.total;
-    const coinBalance = req.user.balance.find(
-      (element) => element.symbol === trade.symbol
+    const coinBalance = req.user.coinBalance.find(
+      (element) => element.coinId === trade.coinId
     );
-    const USDBalance = req.user.balance.find(
-      (element) => element.symbol === 'USD'
+    const USDBalance = req.user.currencyBalance.find(
+      (element) => element.currencyId === 'USA Dollar'
     );
 
     updates.forEach((update) => {
@@ -124,11 +127,11 @@ TradeRouter.delete('/trades/:id', auth, async (req, res) => {
     if (!trade) {
       res.status(404).send();
     }
-    const coinBalance = req.user.balance.find(
-      (element) => element.symbol === trade.symbol
+    const coinBalance = req.user.coinBalance.find(
+      (element) => element.coinId === trade.coinId
     );
-    const USDBalance = req.user.balance.find(
-      (element) => element.symbol === 'USD'
+    const USDBalance = req.user.currencyBalance.find(
+      (element) => element.currencyId === 'USA Dollar'
     );
     coinBalance.quantity -= trade.quantity;
     USDBalance.quantity += trade.total;

@@ -64,7 +64,7 @@ test('Should login successfully with correct credentials', async () => {
 });
 
 test('Should logout currently logged in user', async () => {
-  const response = await request(app)
+  await request(app)
     .post('/users/logout')
     .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
     .send()
@@ -82,31 +82,33 @@ test('Should return the authorized users correct details', async () => {
     _id: userOneId.toHexString(),
     name: userOne.name,
     email: userOne.email,
-    balance: [
+    currencyBalance: [
       {
-        symbol: 'ADA',
+        currencyId: 'USA Dollar',
+        quantity: -4040,
+      },
+    ],
+    coinBalance: [
+      {
+        coinId: 'cardano',
         quantity: 200,
       },
       {
-        symbol: 'BTC',
+        coinId: 'bitcoin',
         quantity: 0.1,
       },
       {
-        symbol: 'ETH',
+        coinId: 'ethereum',
         quantity: 0.5,
-      },
-      {
-        symbol: 'USD',
-        quantity: -4040,
       },
     ],
   });
 });
 
 test('/users patch route', async () => {
-  const response = await request(app).patch('/users/me').expect(200);
+  await request(app).patch('/users/me').expect(200);
 });
 
 test('/users delete route', async () => {
-  const response = await request(app).delete('/users/me').expect(200);
+  await request(app).delete('/users/me').expect(200);
 });

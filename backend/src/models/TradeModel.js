@@ -12,11 +12,11 @@ const TradeSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    symbol: {
+    coinId: {
       type: String,
       required: true,
       trim: true,
-      uppercase: true,
+      lowercase: true,
     },
     quantity: {
       type: Number,

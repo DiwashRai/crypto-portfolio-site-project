@@ -20,13 +20,13 @@ beforeEach(setupDatabase);
 
 test('Logged in users should be able to add trades', async () => {
   const tradeId = new mongoose.Types.ObjectId();
-  const response = await request(app)
+  await request(app)
     .post('/trades')
     .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
     .send({
       _id: tradeId.toHexString(),
       tradeDate: 'testdate',
-      symbol: 'ETH',
+      coinId: 'ethereum',
       quantity: 1,
       cost: 1800,
     })
@@ -43,38 +43,46 @@ test('Logged in users should be able to add trades', async () => {
 });
 
 test('Should update users balance when trade is added', async () => {
-  let response = await request(app)
+  await request(app)
     .post('/trades')
     .set('Authorization', `Bearer ${userThree.tokens[0].token}`)
     .send({
       tradeDate: 'testdate',
-      symbol: 'ETH',
+      coinId: 'ethereum',
       quantity: 1.5,
       cost: 2700,
     })
     .expect(201);
 
   let user = await UserModel.findById(userThreeId);
-  const ETHBalance = user.balance.find((element) => element.symbol === 'ETH');
-  let USDBalance = user.balance.find((element) => element.symbol === 'USD');
-  expect(ETHBalance.quantity).toBe(1.5);
+  const ethereumBalance = user.coinBalance.find(
+    (element) => element.coinId === 'ethereum'
+  );
+  let USDBalance = user.currencyBalance.find(
+    (element) => element.currencyId === 'USA Dollar'
+  );
+  expect(ethereumBalance.quantity).toBe(1.5);
   expect(USDBalance.quantity).toBe(-2700);
 
-  response = await request(app)
+  await request(app)
     .post('/trades')
     .set('Authorization', `Bearer ${userThree.tokens[0].token}`)
     .send({
       tradeDate: 'testdate',
-      symbol: 'BTC',
+      coinId: 'bitcoin',
       quantity: 0.1,
       cost: 4000,
     })
     .expect(201);
 
   user = await UserModel.findById(userThreeId);
-  const BTCBalance = user.balance.find((element) => element.symbol === 'BTC');
-  USDBalance = user.balance.find((element) => element.symbol === 'USD');
-  expect(BTCBalance.quantity).toBe(0.1);
+  const bitcoinBalance = user.coinBalance.find(
+    (element) => element.coinId === 'bitcoin'
+  );
+  USDBalance = user.currencyBalance.find(
+    (element) => element.currencyId === 'USA Dollar'
+  );
+  expect(bitcoinBalance.quantity).toBe(0.1);
   expect(USDBalance.quantity).toBe(-6700);
 });
 
@@ -97,7 +105,7 @@ test('Should retrieve specific trade by specifying ID', async () => {
   expect(response.body).toMatchObject({
     _id: tradeFourId.toHexString(),
     tradeDate: trade.tradeDate,
-    symbol: trade.symbol,
+    coinId: trade.coinId,
     quantity: trade.quantity,
     cost: trade.cost,
     total: trade.total,
@@ -106,14 +114,14 @@ test('Should retrieve specific trade by specifying ID', async () => {
 });
 
 test('Should allow authorized user to update trade details', async () => {
-  const updatedSymbol = 'BTC';
+  const updatedCoinId = 'bitcoin';
   const updatedQuantity = 0.1;
   const updatedFee = 3;
   const response = await request(app)
     .patch(`/trades/${tradeFourId}`)
     .set('Authorization', `Bearer ${userTwo.tokens[0].token}`)
     .send({
-      symbol: updatedSymbol,
+      coinId: updatedCoinId,
       quantity: updatedQuantity,
       fee: updatedFee,
     })
@@ -121,7 +129,7 @@ test('Should allow authorized user to update trade details', async () => {
 
   expect(response.body).toMatchObject({
     _id: tradeFourId.toHexString(),
-    symbol: updatedSymbol,
+    coinId: updatedCoinId,
     quantity: updatedQuantity,
     fee: updatedFee,
   });
@@ -129,40 +137,46 @@ test('Should allow authorized user to update trade details', async () => {
 
 test('Should update the users balance when trades are updated', async () => {
   const firstTradeId = new mongoose.Types.ObjectId();
-  let response = await request(app)
+  await request(app)
     .post('/trades')
     .set('Authorization', `Bearer ${userThree.tokens[0].token}`)
     .send({
       _id: firstTradeId,
       tradeDate: 'testDate',
-      symbol: 'ADA',
+      coinId: 'cardano',
       quantity: 200,
       cost: 240,
     })
     .expect(201);
 
   const secondTradeId = new mongoose.Types.ObjectId();
-  response = await request(app)
+  await request(app)
     .post('/trades')
     .set('Authorization', `Bearer ${userThree.tokens[0].token}`)
     .send({
       _id: secondTradeId,
       tradeDate: 'testDate',
-      symbol: 'BTC',
+      coinId: 'bitcoin',
       quantity: 1,
       cost: 40000,
     })
     .expect(201);
 
   let user = await UserModel.findById(userThreeId);
-  let ADABalance = user.balance.find((element) => element.symbol === 'ADA');
-  let USDBalance = user.balance.find((element) => element.symbol === 'USD');
-  let BTCBalance = user.balance.find((element) => element.symbol === 'BTC');
-  expect(ADABalance.quantity).toBe(200);
+  let cardanoBalance = user.coinBalance.find(
+    (element) => element.coinId === 'cardano'
+  );
+  let USDBalance = user.currencyBalance.find(
+    (element) => element.currencyId === 'USA Dollar'
+  );
+  let bitcoinBalance = user.coinBalance.find(
+    (element) => element.coinId === 'bitcoin'
+  );
+  expect(cardanoBalance.quantity).toBe(200);
   expect(USDBalance.quantity).toBe(-40240);
-  expect(BTCBalance.quantity).toBe(1);
+  expect(bitcoinBalance.quantity).toBe(1);
 
-  response = await request(app)
+  await request(app)
     .patch(`/trades/${firstTradeId}`)
     .set('Authorization', `Bearer ${userThree.tokens[0].token}`)
     .send({
@@ -173,12 +187,16 @@ test('Should update the users balance when trades are updated', async () => {
     .expect(200);
 
   user = await UserModel.findById(userThreeId);
-  ADABalance = user.balance.find((element) => element.symbol === 'ADA');
-  USDBalance = user.balance.find((element) => element.symbol === 'USD');
-  expect(ADABalance.quantity).toBe(100);
+  cardanoBalance = user.coinBalance.find(
+    (element) => element.coinId === 'cardano'
+  );
+  USDBalance = user.currencyBalance.find(
+    (element) => element.currencyId === 'USA Dollar'
+  );
+  expect(cardanoBalance.quantity).toBe(100);
   expect(USDBalance.quantity).toBe(-40123);
 
-  response = await request(app)
+  await request(app)
     .patch(`/trades/${secondTradeId}`)
     .set('Authorization', `Bearer ${userThree.tokens[0].token}`)
     .send({
@@ -189,9 +207,13 @@ test('Should update the users balance when trades are updated', async () => {
     .expect(200);
 
   user = await UserModel.findById(userThreeId);
-  BTCBalance = user.balance.find((element) => element.symbol === 'BTC');
-  USDBalance = user.balance.find((element) => element.symbol === 'USD');
-  expect(BTCBalance.quantity).toBe(0.5);
+  bitcoinBalance = user.coinBalance.find(
+    (element) => element.coinId === 'bitcoin'
+  );
+  USDBalance = user.currencyBalance.find(
+    (element) => element.currencyId === 'USA Dollar'
+  );
+  expect(bitcoinBalance.quantity).toBe(0.5);
   expect(USDBalance.quantity).toBe(-21143);
 });
 
@@ -211,7 +233,7 @@ test('Should allow user to delete their own trade', async () => {
   expect(response.body).toMatchObject({
     _id: tradeFourId.toHexString(),
     tradeDate: trade.tradeDate,
-    symbol: trade.symbol,
+    coinId: trade.coinId,
     quantity: trade.quantity,
     cost: trade.cost,
     total: trade.total,
@@ -225,10 +247,18 @@ test('Should allow user to delete their own trade', async () => {
 
 test('Deleting trades should update the users balance', async () => {
   let user = await UserModel.findById(userOneId);
-  const ETHBalance = user.balance.find((element) => element.symbol === 'ETH');
-  const BTCBalance = user.balance.find((element) => element.symbol === 'BTC');
-  const ADABalance = user.balance.find((element) => element.symbol === 'ADA');
-  const USDBalance = user.balance.find((element) => element.symbol === 'USD');
+  const ethereumBalance = user.coinBalance.find(
+    (element) => element.coinId === 'ethereum'
+  );
+  const bitcoinBalance = user.coinBalance.find(
+    (element) => element.coinId === 'bitcoin'
+  );
+  const cardanoBalance = user.coinBalance.find(
+    (element) => element.coinId === 'cardano'
+  );
+  const USDBalance = user.currencyBalance.find(
+    (element) => element.currencyId === 'USA Dollar'
+  );
 
   let response = await request(app)
     .delete(`/trades/${tradeOneId}`)
@@ -236,9 +266,15 @@ test('Deleting trades should update the users balance', async () => {
     .expect(200);
 
   user = await UserModel.findById(userOneId);
-  let balance = user.balance.find((element) => element.symbol === 'ETH');
-  expect(balance.quantity).toBe(ETHBalance.quantity - response.body.quantity);
-  balance = user.balance.find((element) => element.symbol === 'USD');
+  let balance = user.coinBalance.find(
+    (element) => element.coinId === 'ethereum'
+  );
+  expect(balance.quantity).toBe(
+    ethereumBalance.quantity - response.body.quantity
+  );
+  balance = user.currencyBalance.find(
+    (element) => element.currencyId === 'USA Dollar'
+  );
   expect(balance.quantity).toBe(USDBalance.quantity + response.body.total);
   USDBalance.quantity += response.body.total;
 
@@ -248,9 +284,13 @@ test('Deleting trades should update the users balance', async () => {
     .expect(200);
 
   user = await UserModel.findById(userOneId);
-  balance = user.balance.find((element) => element.symbol === 'BTC');
-  expect(balance.quantity).toBe(BTCBalance.quantity - response.body.quantity);
-  balance = user.balance.find((element) => element.symbol === 'USD');
+  balance = user.coinBalance.find((element) => element.coinId === 'bitcoin');
+  expect(balance.quantity).toBe(
+    bitcoinBalance.quantity - response.body.quantity
+  );
+  balance = user.currencyBalance.find(
+    (element) => element.currencyId === 'USA Dollar'
+  );
   expect(balance.quantity).toBe(USDBalance.quantity + response.body.total);
   USDBalance.quantity += response.body.total;
 
@@ -260,8 +300,12 @@ test('Deleting trades should update the users balance', async () => {
     .expect(200);
 
   user = await UserModel.findById(userOneId);
-  balance = user.balance.find((element) => element.symbol === 'ADA');
-  expect(balance.quantity).toBe(ADABalance.quantity - response.body.quantity);
-  balance = user.balance.find((element) => element.symbol === 'USD');
+  balance = user.coinBalance.find((element) => element.coinId === 'cardano');
+  expect(balance.quantity).toBe(
+    cardanoBalance.quantity - response.body.quantity
+  );
+  balance = user.currencyBalance.find(
+    (element) => element.currencyId === 'USA Dollar'
+  );
   expect(balance.quantity).toBe(USDBalance.quantity + response.body.total);
 });

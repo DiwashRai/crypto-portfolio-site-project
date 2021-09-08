@@ -30,10 +30,23 @@ const UserSchema = new mongoose.Schema(
         },
       },
     ],
-    balance: [
+    currencyBalance: [
       {
         _id: false,
-        symbol: {
+        currencyId: {
+          type: String,
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+    coinBalance: [
+      {
+        _id: false,
+        coinId: {
           type: String,
           required: true,
         },
