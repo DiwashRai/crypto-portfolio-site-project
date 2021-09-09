@@ -5,7 +5,7 @@ const TradeListItem = (props) => {
     <div>
       <p>Trade Date: {props.trade.tradeDate}</p>
       <p>
-        Symbol: {props.trade.symbol} Quantity: {props.trade.quantity} Total:
+        Symbol: {props.trade.coinId} Quantity: {props.trade.quantity} Total:
         {props.trade.total} Price: {props.trade.price}
       </p>
     </div>

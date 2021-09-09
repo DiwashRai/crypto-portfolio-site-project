@@ -3,10 +3,13 @@ export const setPrices = (prices) => ({
   prices,
 });
 
-export const startSetPrices = () => {
+export const startSetPrices = (coinIdArr) => {
   return (dispatch) => {
-    const geckoURL =
-      'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,cardano,polkadot&vs_currencies=usd';
+    let idsValue = '';
+    coinIdArr.forEach((coinId) => {
+      idsValue += coinId + ',';
+    });
+    const geckoURL = `https://api.coingecko.com/api/v3/simple/price?ids=${idsValue}&vs_currencies=usd`;
     fetch(geckoURL)
       .then((response) => {
         return response.json();

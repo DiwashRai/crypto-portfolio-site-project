@@ -4,7 +4,7 @@ const UserBalanceListItem = (props) => {
   return (
     <div>
       <p>
-        {props.symbol} - {props.quantity}
+        {props.coinId} - {props.quantity}
       </p>
     </div>
   );

@@ -8,8 +8,11 @@ const UserBalanceList = (props) => {
   const [accountValue, setAccountValue] = useState(0);
 
   useEffect(() => {
-    props.dispatch(startSetUser());
-    props.dispatch(startSetPrices());
+    props.dispatch(startSetUser()).then((user) => {
+      props.dispatch(
+        startSetPrices(user.coinBalance.map((coin) => coin.coinId))
+      );
+    });
   }, []);
 
   useEffect(() => {
@@ -17,32 +20,24 @@ const UserBalanceList = (props) => {
       return;
     }
 
-    let total = 0;
-    props.user.balance.forEach((item) => {
-      switch (item.symbol) {
-        case 'USD':
-          total += item.quantity;
-          break;
-        case 'BTC':
-          total += item.quantity * props.prices.bitcoin.usd;
-          break;
-        case 'ETH':
-          total += item.quantity * props.prices.ethereum.usd;
-          break;
-        case 'ADA':
-          total += item.quantity * props.prices.cardano.usd;
-          break;
-      }
-      setAccountValue(total);
+    const usdBalance = props.user.currencyBalance.find(
+      (currency) => currency.currencySymbol === 'usd'
+    );
+    let total = usdBalance.quantity;
+    props.user.coinBalance.forEach((coin) => {
+      total += coin.quantity * props.prices[coin.coinId].usd;
     });
-  }, [props.prices, props.user.balance]);
+    setAccountValue(total);
+  }, [props.prices, props.user.coinBalance]);
 
   return (
     <div>
       <button
         onClick={(e) => {
           e.preventDefault();
-          props.dispatch(startSetPrices());
+          props.dispatch(
+            startSetPrices(props.user.coinBalance.map((coin) => coin.coinId))
+          );
         }}
       >
         Refresh
@@ -50,11 +45,21 @@ const UserBalanceList = (props) => {
       <h3>Account Value</h3>
       <p>{accountValue}</p>
       <h3>Balance</h3>
-      {props.user.balance &&
-        props.user.balance.map((coin) => (
+      {props.user.currencyBalance && (
+        <p>
+          USD -{' '}
+          {
+            props.user.currencyBalance.find(
+              (currency) => currency.currencySymbol === 'usd'
+            ).quantity
+          }
+        </p>
+      )}
+      {props.user.coinBalance &&
+        props.user.coinBalance.map((coin) => (
           <UserBalanceListItem
-            key={coin.symbol}
-            symbol={coin.symbol}
+            key={coin.coinId}
+            coinId={coin.coinId}
             quantity={coin.quantity}
           />
         ))}
