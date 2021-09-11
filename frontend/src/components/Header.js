@@ -5,10 +5,13 @@ const Header = () => (
   <header>
     <h1>Coinsensus</h1>
     <NavLink to="/" activeClassName="is-active" exact={true}>
+      Login
+    </NavLink>
+    <NavLink to="/dashboard" activeClassName="is-active">
       Dashboard
     </NavLink>
-    <NavLink to="/login" activeClassName="is-active">
-      Login
+    <NavLink to="/add" activeClassName="is-active">
+      Add
     </NavLink>
   </header>
 );
