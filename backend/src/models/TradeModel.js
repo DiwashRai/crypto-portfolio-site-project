@@ -8,7 +8,7 @@ const TradeSchema = new mongoose.Schema(
       ref: 'User',
     },
     tradeDate: {
-      type: String,
+      type: Date,
       required: true,
       trim: true,
     },

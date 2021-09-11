@@ -25,7 +25,7 @@ test('Logged in users should be able to add trades', async () => {
     .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
     .send({
       _id: tradeId.toHexString(),
-      tradeDate: 'testdate',
+      tradeDate: Date.now(),
       coinId: 'ethereum',
       quantity: 1,
       cost: 1800,
@@ -47,7 +47,7 @@ test('Should update users balance when trade is added', async () => {
     .post('/trades')
     .set('Authorization', `Bearer ${userThree.tokens[0].token}`)
     .send({
-      tradeDate: 'testdate',
+      tradeDate: Date.now(),
       coinId: 'ethereum',
       quantity: 1.5,
       cost: 2700,
@@ -68,7 +68,7 @@ test('Should update users balance when trade is added', async () => {
     .post('/trades')
     .set('Authorization', `Bearer ${userThree.tokens[0].token}`)
     .send({
-      tradeDate: 'testdate',
+      tradeDate: Date.now(),
       coinId: 'bitcoin',
       quantity: 0.1,
       cost: 4000,
@@ -104,7 +104,7 @@ test('Should retrieve specific trade by specifying ID', async () => {
   const trade = await TradeModel.findById(tradeFourId);
   expect(response.body).toMatchObject({
     _id: tradeFourId.toHexString(),
-    tradeDate: trade.tradeDate,
+    tradeDate: trade.tradeDate.toISOString(),
     coinId: trade.coinId,
     quantity: trade.quantity,
     cost: trade.cost,
@@ -142,7 +142,7 @@ test('Should update the users balance when trades are updated', async () => {
     .set('Authorization', `Bearer ${userThree.tokens[0].token}`)
     .send({
       _id: firstTradeId,
-      tradeDate: 'testDate',
+      tradeDate: Date.now(),
       coinId: 'cardano',
       quantity: 200,
       cost: 240,
@@ -155,7 +155,7 @@ test('Should update the users balance when trades are updated', async () => {
     .set('Authorization', `Bearer ${userThree.tokens[0].token}`)
     .send({
       _id: secondTradeId,
-      tradeDate: 'testDate',
+      tradeDate: Date.now(),
       coinId: 'bitcoin',
       quantity: 1,
       cost: 40000,
@@ -232,7 +232,7 @@ test('Should allow user to delete their own trade', async () => {
   // check that the response body contains correct trade details
   expect(response.body).toMatchObject({
     _id: tradeFourId.toHexString(),
-    tradeDate: trade.tradeDate,
+    tradeDate: trade.tradeDate.toISOString(),
     coinId: trade.coinId,
     quantity: trade.quantity,
     cost: trade.cost,

@@ -85,7 +85,7 @@ const tradeOneId = new mongoose.Types.ObjectId();
 const tradeOne = {
   _id: tradeOneId,
   owner: userOneId,
-  tradeDate: '20-02-21',
+  tradeDate: Date.now(),
   coinId: 'ethereum',
   quantity: 0.5,
   cost: 800,
@@ -95,7 +95,7 @@ const tradeTwoId = new mongoose.Types.ObjectId();
 const tradeTwo = {
   _id: tradeTwoId,
   owner: userOneId,
-  tradeDate: '10-01-21',
+  tradeDate: Date.now(),
   coinId: 'bitcoin',
   quantity: 0.1,
   cost: 3000,
@@ -105,7 +105,7 @@ const tradeThreeId = new mongoose.Types.ObjectId();
 const tradeThree = {
   _id: tradeThreeId,
   owner: userOneId,
-  tradeDate: '30-03-21',
+  tradeDate: Date.now(),
   coinId: 'cardano',
   quantity: 200,
   cost: 240,
@@ -115,7 +115,7 @@ const tradeFourId = new mongoose.Types.ObjectId();
 const tradeFour = {
   _id: tradeFourId,
   owner: userTwoId,
-  tradeDate: '10-01-21',
+  tradeDate: Date.now(),
   coinId: 'polkadot',
   quantity: 20,
   cost: 300,
