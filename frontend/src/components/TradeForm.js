@@ -1,25 +1,31 @@
 import React, { useState } from 'react';
+import moment from 'moment';
+import 'react-dates/initialize';
+import { SingleDatePicker } from 'react-dates';
+import 'react-dates/lib/css/_datepicker.css';
 
 const TradeForm = (props) => {
   const [tradeDate, setTradeDate] = useState(() =>
-    props.trade.tradeDate ? props.trade.tradeDate : ''
+    props.trade ? moment(props.trade.tradeDate) : moment()
   );
   const [coinId, setCoinId] = useState(() =>
-    props.trade.coinId ? props.trade.coinId : ''
+    props.trade ? props.trade.coinId : ''
   );
   const [quantity, setQuantity] = useState(() =>
-    props.trade.quantity ? props.trade.quantity : ''
+    props.trade ? props.trade.quantity : ''
   );
-  const [cost, setCost] = useState(() =>
-    props.trade.cost ? props.trade.cost : ''
-  );
-  const [fee, setFee] = useState(() =>
-    props.trade.fee ? props.trade.fee : ''
-  );
+  const [cost, setCost] = useState(() => (props.trade ? props.trade.cost : ''));
+  const [fee, setFee] = useState(() => (props.trade ? props.trade.fee : ''));
+  const [calendarFocused, setCalendarFocused] = useState(false);
+
   const [error, setError] = useState('');
 
-  const onTradeDateChange = (e) => {
-    setTradeDate(e.target.value);
+  const onTradeDateChange = (tradeDate) => {
+    setTradeDate(tradeDate);
+  };
+
+  const onFocusChange = ({ focused }) => {
+    setCalendarFocused(focused);
   };
 
   const onCoinIdChange = (e) => {
@@ -57,7 +63,7 @@ const TradeForm = (props) => {
     } else {
       setError('');
       props.onSubmit({
-        tradeDate,
+        tradeDate: tradeDate.toISOString(),
         coinId,
         quantity,
         cost,
@@ -70,11 +76,14 @@ const TradeForm = (props) => {
     <div>
       <form onSubmit={onSubmit}>
         {error && <p>{error}</p>}
-        <input
-          type="text"
-          placeholder="TradeDate"
-          value={tradeDate}
-          onChange={onTradeDateChange}
+        <SingleDatePicker
+          date={tradeDate}
+          onDateChange={onTradeDateChange}
+          focused={calendarFocused}
+          onFocusChange={onFocusChange}
+          id="trade_form_date_picker"
+          numberOfMonths={1}
+          isOutsideRange={() => false}
         />
         <input
           type="text"

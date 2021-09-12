@@ -5,7 +5,7 @@ import { startAddTrade } from '../actions/tradesActions';
 
 const AddTradePage = (props) => (
   <div>
-    <h1>Add trade</h1>
+    <h1>Add Trade</h1>
     <TradeForm
       onSubmit={(trade) => {
         props.dispatch(startAddTrade(trade));

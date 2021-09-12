@@ -7,36 +7,37 @@ const Login = (props) => {
   const [password, setPassword] = useState('');
 
   return (
-    <div>
-      <h1>Sign in</h1>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          props.dispatch(handleLogin(email, password));
-        }}
-      >
-        <input
-          type="text"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Sign in</button>
-      </form>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          console.log(props.authentication);
-        }}
-      >
-        Check state
-      </button>
+    <div className="box-layout">
+      <div className="box-layout__box">
+        <h1 className="box-layout__title">Coinsensus</h1>
+        <form
+          className="login-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            props.dispatch(handleLogin(email, password));
+            props.history.push('/dashboard');
+          }}
+        >
+          <input
+            type="text"
+            placeholder="Email"
+            className="text-input"
+            autoFocus
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="text-input"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button className="button" type="submit">
+            Sign in
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import AddTradePage from '../components/AddTradePage';
 import Dashboard from '../components/Dashboard';
@@ -10,13 +10,15 @@ import NotFoundPage from '../components/NotFoundPage';
 const AppRouter = () => (
   <BrowserRouter>
     <div>
-      <Header />
       <Switch>
         <Route path="/" component={Login} exact={true} />
-        <Route path="/dashboard" component={Dashboard} />
-        <Route path="/add" component={AddTradePage} />
-        <Route path="/edit/:id" component={EditTradePage} />
-        <Route componenet={NotFoundPage} />
+        <Fragment>
+          <Header />
+          <Route path="/dashboard" component={Dashboard} />
+          <Route path="/add" component={AddTradePage} />
+          <Route path="/edit/:id" component={EditTradePage} />
+          <Route componenet={NotFoundPage} />
+        </Fragment>
       </Switch>
     </div>
   </BrowserRouter>

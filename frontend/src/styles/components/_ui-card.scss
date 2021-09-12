@@ -1,0 +1,22 @@
+.ui-card {
+  margin: $m-size auto;
+  background: white;
+  border: 1px solid #dcdcdc;
+  border-radius: 5px;
+  max-width: 80rem;
+  padding: $s-size;
+}
+
+.ui-card__title {
+  background: white;
+  border-radius: 5px 5px 0 0;
+  color: $grey;
+  display: flex;
+  font-size: $font-size-large;
+  justify-content: center;
+}
+
+.ui-card__content {
+  border-top: 1px solid $grey-line;
+  margin-top: $s-size;
+}

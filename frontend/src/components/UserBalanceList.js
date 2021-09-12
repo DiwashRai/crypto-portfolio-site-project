@@ -31,17 +31,7 @@ const UserBalanceList = (props) => {
   }, [props.prices, props.user.coinBalance]);
 
   return (
-    <div>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          props.dispatch(
-            startSetPrices(props.user.coinBalance.map((coin) => coin.coinId))
-          );
-        }}
-      >
-        Refresh
-      </button>
+    <div className="ui-card">
       <h3>Account Value</h3>
       <p>{accountValue}</p>
       <h3>Balance</h3>
@@ -63,6 +53,16 @@ const UserBalanceList = (props) => {
             quantity={coin.quantity}
           />
         ))}
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          props.dispatch(
+            startSetPrices(props.user.coinBalance.map((coin) => coin.coinId))
+          );
+        }}
+      >
+        Refresh
+      </button>
     </div>
   );
 };
