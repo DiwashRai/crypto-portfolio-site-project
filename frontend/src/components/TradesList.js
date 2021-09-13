@@ -18,6 +18,7 @@ const TradesList = (props) => {
           <table>
             <thead>
               <tr>
+                <th className="table-edit-header"></th>
                 <th>Date</th>
                 <th>Crypto</th>
                 <th>Quantity</th>

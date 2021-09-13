@@ -1,3 +1,33 @@
+table {
+  border: 1px solid $grey-line;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-family: 'Ubuntu Mono', monospace;
+  margin: $m-size auto;
+}
+
+th, td {
+  border: 1px solid $grey-line;
+  height: 36px;
+  padding: 0 $s-size;
+}
+
 th {
+  background: #FBFBFB;
+  color: $grey;
   text-align: left;
+  font-weight: 400;
+  width: 120px;
+}
+
+.table-edit-header {
+  width: 30px;
+}
+
+td, td > a {
+  color: $dark-grey;
+}
+
+td > a:hover {
+  color: $watermelon;
 }
