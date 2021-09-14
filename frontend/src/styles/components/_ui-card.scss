@@ -1,7 +1,7 @@
 .ui-card {
   margin: $m-size auto;
   background: white;
-  border: 1px solid #dcdcdc;
+  border: 1px solid $ui-card-line;
   border-radius: 5px;
   font-size: $font-size-small;
   max-width: 80rem;
@@ -13,6 +13,8 @@
   border-radius: 5px 5px 0 0;
   color: $grey;
   display: flex;
+  font-family: Ubuntu;
+  font-weight: 500;
   justify-content: center;
 }
 

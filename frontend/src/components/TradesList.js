@@ -11,19 +11,19 @@ const TradesList = (props) => {
   return (
     <div className="ui-card">
       <div className="ui-card__title">
-        <span>Trades Ledger</span>
+        <span>TRADES LEDGER</span>
       </div>
       <div className="ui-card__content">
         <div>
           <table>
             <thead>
               <tr>
-                <th className="table-edit-header"></th>
+                <th className="table__edit-cell"></th>
                 <th>Date</th>
                 <th>Crypto</th>
-                <th>Quantity</th>
-                <th>Total</th>
-                <th>Price</th>
+                <th className="table__number-cell">Quantity</th>
+                <th className="table__number-cell">Total</th>
+                <th className="table__number-cell">Price</th>
               </tr>
             </thead>
             <tbody>

@@ -2,11 +2,10 @@ import React from 'react';
 
 const UserBalanceListItem = (props) => {
   return (
-    <div>
-      <p>
-        {props.coinId} - {props.quantity}
-      </p>
-    </div>
+    <tr>
+      <td>{props.coinId}</td>
+      <td>{props.quantity}</td>
+    </tr>
   );
 };
 

@@ -1,25 +1,26 @@
 .header {
-  background: black;
+  background: white;
+  border-bottom: 1px solid $ui-card-line;
 
   .content-container {
     align-items: center;
     display: flex;
+    padding: 1rem 0;
   }
 
   a {
-    color: white;
+    color: #757575;
     margin: 0 $s-size;
-    padding: $s-size;
     text-decoration: none;
     &:hover {
-      color: $grey;
+      color: black;
     }
   }
 }
 
 .header__title {
-  color: white;
-  font-weight: 400;
-  margin-right: auto;
+  color: #757575;
+  font-weight: 500;
+  margin: 0 auto 0 0;
 }
 

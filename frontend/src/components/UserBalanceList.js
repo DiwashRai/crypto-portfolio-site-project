@@ -45,24 +45,24 @@ const UserBalanceList = (props) => {
           }
         </p>
       )}
-      {props.user.coinBalance &&
-        props.user.coinBalance.map((coin) => (
-          <UserBalanceListItem
-            key={coin.coinId}
-            coinId={coin.coinId}
-            quantity={coin.quantity}
-          />
-        ))}
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          props.dispatch(
-            startSetPrices(props.user.coinBalance.map((coin) => coin.coinId))
-          );
-        }}
-      >
-        Refresh
-      </button>
+      <table>
+        <thead>
+          <tr>
+            <th>Coin</th>
+            <th>Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {props.user.coinBalance &&
+            props.user.coinBalance.map((coin) => (
+              <UserBalanceListItem
+                key={coin.coinId}
+                coinId={coin.coinId}
+                quantity={coin.quantity}
+              />
+            ))}
+        </tbody>
+      </table>
     </div>
   );
 };

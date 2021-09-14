@@ -20,8 +20,12 @@ th {
   width: 120px;
 }
 
-.table-edit-header {
+.table__edit-cell {
   width: 30px;
+}
+
+.table__number-cell {
+  text-align: right;
 }
 
 td, td > a {
