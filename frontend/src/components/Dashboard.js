@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { startSetUser } from '../actions/userActions';
+import { startSetPrices } from '../actions/pricesActions';
 import CryptoOverview from './CryptoOverview';
-import UserBalanceList from './UserBalanceList';
 import TradesList from './TradesList';
 
-const Dashboard = () => {
+const Dashboard = (props) => {
+  useEffect(() => {
+    props.dispatch(startSetUser()).then((user) => {
+      props.dispatch(
+        startSetPrices(user.coinBalance.map((coin) => coin.coinId))
+      );
+    });
+  }, []);
+
   return (
     <div className="dashboard">
       <CryptoOverview />
@@ -12,4 +22,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default connect()(Dashboard);

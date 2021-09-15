@@ -1,17 +1,25 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { startSetUser } from '../actions/userActions';
-import { startSetPrices } from '../actions/pricesActions';
 import CryptoOverviewTableItem from './CryptoOverviewTableItem';
 
 const CryptoOverview = (props) => {
-  useEffect(() => {
-    props.dispatch(startSetUser()).then((user) => {
-      props.dispatch(
-        startSetPrices(user.coinBalance.map((coin) => coin.coinId))
-      );
-    });
-  }, []);
+  const getCryptoOverviewTableItem = (coin) => {
+    return (
+      <CryptoOverviewTableItem
+        key={coin.coinId}
+        coinId={coin.coinId}
+        trend={'-'}
+        daily={'0'}
+        weekly={'0'}
+        quantity={coin.quantity}
+        currentPrice={
+          props.prices[coin.coinId]
+            ? props.prices[coin.coinId].usd
+            : 'loading...'
+        }
+      />
+    );
+  };
 
   return (
     <div className="ui-card">
@@ -24,25 +32,17 @@ const CryptoOverview = (props) => {
             <tr>
               <th>Coin</th>
               <th>Trend</th>
-              <th>24h%</th>
-              <th>7d%</th>
-              <th>Quantity</th>
-              <th>Current Price</th>
+              <th className="table__number-cell">24h%</th>
+              <th className="table__number-cell">7d%</th>
+              <th className="table__number-cell">Quantity</th>
+              <th className="table__number-cell">Current Price</th>
             </tr>
           </thead>
           <tbody>
             {props.user.coinBalance &&
-              props.user.coinBalance.map((coin) => (
-                <CryptoOverviewTableItem
-                  key={coin.coinId}
-                  coinId={coin.coinId}
-                  trend={'-'}
-                  daily={'0'}
-                  weekly={'0'}
-                  currentPrice={'-'}
-                  quantity={coin.quantity}
-                />
-              ))}
+              props.user.coinBalance.map((coin) =>
+                getCryptoOverviewTableItem(coin)
+              )}
           </tbody>
         </table>
       </div>
@@ -53,6 +53,7 @@ const CryptoOverview = (props) => {
 const mapStateToProps = (state) => {
   return {
     user: state.user,
+    prices: state.prices,
   };
 };
 
