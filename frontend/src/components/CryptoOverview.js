@@ -1,9 +1,18 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import CryptoOverviewTableItem from './CryptoOverviewTableItem';
 
-const CryptoOverview = (props) => {
+const CryptoOverview = () => {
+  const user = useSelector((state) => state.user);
+  const prices = useSelector((state) => state.prices);
+
   const getCryptoOverviewTableItem = (coin) => {
+    coin.currentValue = 0;
+    const priceData = prices[coin.coinId];
+    if (priceData) {
+      coin.currentValue = coin.quantity * priceData.usd;
+    }
+
     return (
       <CryptoOverviewTableItem
         key={coin.coinId}
@@ -12,11 +21,9 @@ const CryptoOverview = (props) => {
         daily={'0'}
         weekly={'0'}
         quantity={coin.quantity}
-        currentPrice={
-          props.prices[coin.coinId]
-            ? props.prices[coin.coinId].usd
-            : 'loading...'
-        }
+        currentPrice={priceData ? priceData.usd : 'loading...'}
+        netInvestment={'0'}
+        currentValue={coin.currentValue.toFixed(2)}
       />
     );
   };
@@ -36,13 +43,13 @@ const CryptoOverview = (props) => {
               <th className="table__number-cell">7d%</th>
               <th className="table__number-cell">Quantity</th>
               <th className="table__number-cell">Current Price</th>
+              <th className="table__number-cell">Net Investment</th>
+              <th className="table__number-cell">Current Value</th>
             </tr>
           </thead>
           <tbody>
-            {props.user.coinBalance &&
-              props.user.coinBalance.map((coin) =>
-                getCryptoOverviewTableItem(coin)
-              )}
+            {user.coinBalance &&
+              user.coinBalance.map((coin) => getCryptoOverviewTableItem(coin))}
           </tbody>
         </table>
       </div>
@@ -50,11 +57,4 @@ const CryptoOverview = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    user: state.user,
-    prices: state.prices,
-  };
-};
-
-export default connect(mapStateToProps)(CryptoOverview);
+export default CryptoOverview;

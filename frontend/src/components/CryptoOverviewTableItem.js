@@ -9,6 +9,8 @@ const CryptoOverviewTableItem = (props) => {
       <td className="table__number-cell">{props.weekly}</td>
       <td className="table__number-cell">{props.quantity.toFixed(2)}</td>
       <td className="table__number-cell">{props.currentPrice}</td>
+      <td className="table__number-cell">{props.netInvestment}</td>
+      <td className="table__number-cell">{props.currentValue}</td>
     </tr>
   );
 };

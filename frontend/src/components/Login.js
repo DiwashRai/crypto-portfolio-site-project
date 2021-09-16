@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { handleLogin } from '../actions/authenticationActions';
 
-const Login = (props) => {
+const Login = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -14,8 +17,8 @@ const Login = (props) => {
           className="login-form"
           onSubmit={(e) => {
             e.preventDefault();
-            props.dispatch(handleLogin(email, password));
-            props.history.push('/dashboard');
+            dispatch(handleLogin(email, password));
+            history.push('/dashboard');
           }}
         >
           <input
@@ -42,10 +45,4 @@ const Login = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    authentication: state.authentication,
-  };
-};
-
-export default connect(mapStateToProps)(Login);
+export default Login;

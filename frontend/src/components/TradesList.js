@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { startSetTrades } from '../actions/tradesActions';
 import TradesListItem from './TradesListItem';
 
-const TradesList = (props) => {
+const TradesList = () => {
+  const trades = useSelector((state) => state.trades);
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    props.dispatch(startSetTrades());
+    dispatch(startSetTrades());
   }, []);
 
   return (
@@ -27,7 +30,7 @@ const TradesList = (props) => {
               </tr>
             </thead>
             <tbody>
-              {props.trades.map((trade) => (
+              {trades.map((trade) => (
                 <TradesListItem key={trade._id} trade={trade} />
               ))}
             </tbody>
@@ -38,10 +41,4 @@ const TradesList = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    trades: state.trades,
-  };
-};
-
-export default connect(mapStateToProps)(TradesList);
+export default TradesList;

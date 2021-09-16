@@ -1,18 +1,23 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import TradeForm from './TradeForm';
 import { startAddTrade } from '../actions/tradesActions';
 
-const AddTradePage = (props) => (
-  <div>
-    <h1>Add Trade</h1>
-    <TradeForm
-      onSubmit={(trade) => {
-        props.dispatch(startAddTrade(trade));
-        props.history.push('/dashboard');
-      }}
-    />
-  </div>
-);
+const AddTradePage = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-export default connect()(AddTradePage);
+  return (
+    <div>
+      <h1>Add Trade</h1>
+      <TradeForm
+        onSubmit={(trade) => {
+          dispatch(startAddTrade(trade));
+          history.push('/dashboard');
+        }}
+      />
+    </div>
+  );
+};
+
+export default AddTradePage;

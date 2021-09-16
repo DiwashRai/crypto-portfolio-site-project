@@ -1,30 +1,33 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import TradeForm from './TradeForm';
 import { startEditTrade, startDeleteTrade } from '../actions/tradesActions';
 
 const EditTradePage = (props) => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const trade = useSelector((state) =>
+    state.trades.find((trade) => trade._id === props.match.params.id)
+  );
+
   const onSubmitEdit = (trade) => {
-    props.dispatch(startEditTrade(props.trade._id, trade));
-    props.history.push('/dashboard');
+    dispatch(startEditTrade(trade._id, trade));
+    history.push('/dashboard');
   };
 
   const onDelete = () => {
-    props.dispatch(startDeleteTrade(props.trade._id));
-    props.history.push('/dashboard');
+    dispatch(startDeleteTrade(trade._id));
+    history.push('/dashboard');
   };
 
   return (
     <div>
       <h1>Edit Trade</h1>
-      <TradeForm trade={props.trade} onSubmit={onSubmitEdit} />
+      <TradeForm trade={trade} onSubmit={onSubmitEdit} />
       <button onClick={onDelete}>Delete Trade</button>
     </div>
   );
 };
 
-const mapStateToProps = (state, props) => ({
-  trade: state.trades.find((trade) => trade._id === props.match.params.id),
-});
-
-export default connect(mapStateToProps)(EditTradePage);
+export default EditTradePage;

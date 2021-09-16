@@ -1,25 +1,27 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { startSetUser } from '../actions/userActions';
 import { startSetPrices } from '../actions/pricesActions';
+import ReturnSummary from './ReturnSummary';
 import CryptoOverview from './CryptoOverview';
 import TradesList from './TradesList';
 
-const Dashboard = (props) => {
+const Dashboard = () => {
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    props.dispatch(startSetUser()).then((user) => {
-      props.dispatch(
-        startSetPrices(user.coinBalance.map((coin) => coin.coinId))
-      );
+    dispatch(startSetUser()).then((user) => {
+      dispatch(startSetPrices(user.coinBalance.map((coin) => coin.coinId)));
     });
   }, []);
 
   return (
     <div className="dashboard">
+      <ReturnSummary />
       <CryptoOverview />
       <TradesList />
     </div>
   );
 };
 
-export default connect()(Dashboard);
+export default Dashboard;
