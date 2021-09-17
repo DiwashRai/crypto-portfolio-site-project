@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { selectTrades } from '../reducers/tradesReducer';
 import { startSetTrades } from '../actions/tradesActions';
 import TradesListItem from './TradesListItem';
 
 const TradesList = () => {
-  const trades = useSelector((state) => state.trades);
+  const trades = useSelector((state) => selectTrades(state));
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,10 +32,19 @@ const TradesList = () => {
             </thead>
             <tbody>
               {trades.map((trade) => (
-                <TradesListItem key={trade._id} trade={trade} />
+                <TradesListItem
+                  key={trade._id}
+                  tradeId={trade._id}
+                  coinId={trade.coinId}
+                  tradeDate={trade.tradeDate}
+                  quantity={trade.quantity}
+                  total={trade.total}
+                  price={trade.price}
+                />
               ))}
             </tbody>
           </table>
+          <button onClick={() => dispatch(startSetTrades())}>refresh</button>
         </div>
       </div>
     </div>

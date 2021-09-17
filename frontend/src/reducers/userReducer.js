@@ -6,3 +6,5 @@ export default (state = {}, action) => {
       return state;
   }
 };
+
+export const selectUser = (state) => state.user;

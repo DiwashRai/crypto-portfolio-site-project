@@ -2,13 +2,14 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import TradeForm from './TradeForm';
+import { selectTradeById } from '../reducers/tradesReducer';
 import { startEditTrade, startDeleteTrade } from '../actions/tradesActions';
 
 const EditTradePage = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const trade = useSelector((state) =>
-    state.trades.find((trade) => trade._id === props.match.params.id)
+    selectTradeById(state, props.match.params.id)
   );
 
   const onSubmitEdit = (trade) => {
