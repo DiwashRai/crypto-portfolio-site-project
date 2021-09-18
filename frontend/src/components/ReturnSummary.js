@@ -9,14 +9,21 @@ const ReturnSummary = () => {
   );
   const cryptoOverview = useSelector((state) => selectCryptoOverview(state));
   const [totalCurrentValue, setTotalCurrentValue] = useState(0);
+  const [totalValueChange, setTotalValueChange] = useState(0);
+  const [percentChange, setPercentChange] = useState(0);
 
   useEffect(() => {
-    if (cryptoOverview !== undefined) {
-      setTotalCurrentValue(
-        cryptoOverview.reduce((total, row) => total + row.currentValue, 0)
-      );
-    }
-  }, cryptoOverview);
+    if (cryptoOverview === undefined) return;
+    setTotalCurrentValue(
+      cryptoOverview.reduce((total, row) => total + row.currentValue, 0)
+    );
+  }, [cryptoOverview]);
+
+  useEffect(() => {
+    if (totalOriginalValue === 0) return;
+    setPercentChange((totalCurrentValue / totalOriginalValue - 1) * 100);
+    setTotalValueChange(totalCurrentValue - totalOriginalValue);
+  }, [totalCurrentValue, totalOriginalValue]);
 
   return (
     <div className="ui-card">
@@ -26,23 +33,38 @@ const ReturnSummary = () => {
       <table>
         <thead>
           <tr>
-            <th>Total Original Value</th>
-            <th>Total Current Value</th>
-            <th>Total Value Change</th>
-            <th>Percent Change</th>
+            <th className="table__number-cell">Total Original Value</th>
+            <th className="table__number-cell">Total Current Value</th>
+            <th className="table__number-cell">Total Value Change</th>
+            <th className="table__number-cell">Percent Change</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>{totalOriginalValue.toFixed(2)}</td>
             <td className="table__number-cell">
-              {cryptoOverview &&
-                cryptoOverview
-                  .reduce((total, row) => total + row.currentValue, 0)
-                  .toFixed(2)}
+              {totalOriginalValue.toFixed(2)}
             </td>
-            <td>{totalCurrentValue}</td>
-            <td>{'...'}</td>
+            <td className="table__number-cell">
+              {totalCurrentValue.toFixed(2)}
+            </td>
+            <td
+              className={`table__number-cell ${
+                totalValueChange > 0
+                  ? 'table__number-cell--positive'
+                  : 'table__number-cell--negative'
+              }`}
+            >
+              {totalValueChange.toFixed(2)}
+            </td>
+            <td
+              className={`table__number-cell ${
+                percentChange > 0
+                  ? 'table__number-cell--positive'
+                  : 'table__number-cell--negative'
+              }`}
+            >
+              {`${percentChange.toFixed(2)}%`}
+            </td>
           </tr>
         </tbody>
       </table>

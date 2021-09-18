@@ -9,7 +9,7 @@ export const startSetPrices = (coinIdArr) => {
     coinIdArr.forEach((coinId) => {
       idsValue += coinId + ',';
     });
-    const geckoURL = `https://api.coingecko.com/api/v3/simple/price?ids=${idsValue}&vs_currencies=usd`;
+    const geckoURL = `https://api.coingecko.com/api/v3/simple/price?ids=${idsValue}&vs_currencies=usd&include_24hr_change=true`;
     fetch(geckoURL)
       .then((response) => {
         return response.json();

@@ -44,7 +44,6 @@ const TradesList = () => {
               ))}
             </tbody>
           </table>
-          <button onClick={() => dispatch(startSetTrades())}>refresh</button>
         </div>
       </div>
     </div>

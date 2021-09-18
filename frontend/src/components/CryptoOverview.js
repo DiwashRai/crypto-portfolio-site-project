@@ -1,12 +1,10 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { startSetUser } from '../actions/userActions';
+import { useSelector } from 'react-redux';
 import { selectCryptoOverview } from '../selectors/cryptoOverviewSelector';
 import CryptoOverviewTableItem from './CryptoOverviewTableItem';
 
 const CryptoOverview = () => {
   const overview = useSelector((state) => selectCryptoOverview(state));
-  const dispatch = useDispatch();
 
   return (
     <div className="ui-card">
@@ -18,13 +16,13 @@ const CryptoOverview = () => {
           <thead>
             <tr>
               <th>Coin</th>
-              <th>Trend</th>
               <th className="table__number-cell">24h%</th>
-              <th className="table__number-cell">7d%</th>
               <th className="table__number-cell">Quantity</th>
               <th className="table__number-cell">Current Price</th>
               <th className="table__number-cell">Net Investment</th>
               <th className="table__number-cell">Current Value</th>
+              <th className="table__number-cell">Profit/Loss</th>
+              <th className="table__number-cell">% Change</th>
             </tr>
           </thead>
           <tbody>
@@ -33,16 +31,23 @@ const CryptoOverview = () => {
                 <CryptoOverviewTableItem
                   key={row.coinId}
                   coinId={row.coinId}
-                  trend={'_'}
                   quantity={row.quantity}
+                  usdChange24h={row.usdChange24h}
                   currentPrice={row.currentPrice}
-                  netInvestment={0}
+                  netInvestment={row.netInvestment}
                   currentValue={row.currentValue}
+                  profitAndLoss={row.currentValue - row.netInvestment}
+                  percentChange={
+                    row.netInvestment > 0
+                      ? ((row.currentValue - row.netInvestment) /
+                          row.netInvestment) *
+                        100
+                      : undefined
+                  }
                 />
               ))}
           </tbody>
         </table>
-        <button onClick={() => dispatch(startSetUser())}>refresh user</button>
       </div>
     </div>
   );

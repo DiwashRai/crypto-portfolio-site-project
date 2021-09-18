@@ -26,6 +26,14 @@ th {
 
 .table__number-cell {
   text-align: right;
+
+  &--positive {
+    color: $positive-green;
+  }
+
+  &--negative {
+    color: $negative-red;
+  }
 }
 
 td, td > a {

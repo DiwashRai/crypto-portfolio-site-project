@@ -16,3 +16,16 @@ export const selectTotalOriginalValue = (state) => {
   const trades = selectTrades(state);
   return trades.reduce((total, trade) => total + trade.total, 0);
 };
+
+export const selectNetInvestmentsByCoinId = (state) => {
+  const trades = selectTrades(state);
+  const netInvestments = {};
+  trades.forEach((trade) => {
+    if (!(trade.coinId in netInvestments)) {
+      netInvestments[trade.coinId] = 0;
+    }
+
+    netInvestments[trade.coinId] += trade.total;
+  });
+  return netInvestments;
+};
