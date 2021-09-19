@@ -1,3 +1,10 @@
+import axios from 'axios';
+
+// SET_AUTHENTICATED
+export const setAuthenticated = () => ({
+  type: 'SET_AUTHENTICATED',
+});
+
 // START_LOGIN
 export const startLogin = () => ({
   type: 'START_LOGIN',
@@ -15,28 +22,21 @@ export const loginFailure = () => ({
 
 export const handleLogin = (email, password) => {
   return (dispatch) => {
-    const config = {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    };
     dispatch(startLogin());
 
-    fetch(`${REACT_APP_API_URL}/users/login`, config)
-      .then((response) => {
-        if (response.status !== 200) {
-          throw new Error(response.err);
+    axios
+      .post(
+        `${REACT_APP_API_URL}/users/login`,
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true,
         }
-        return response.json();
-      })
+      )
       .then((result) => {
-        console.log(result);
+        console.log(result.data);
         dispatch(loginSuccess());
       })
       .catch((err) => {

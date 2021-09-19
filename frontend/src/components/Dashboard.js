@@ -10,9 +10,13 @@ const Dashboard = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(startSetUser()).then((user) => {
-      dispatch(startSetPrices(user.coinBalance.map((coin) => coin.coinId)));
-    });
+    dispatch(startSetUser())
+      .then((user) => {
+        dispatch(startSetPrices(user.coinBalance.map((coin) => coin.coinId)));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   return (

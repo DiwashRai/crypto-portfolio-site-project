@@ -5,6 +5,11 @@ const authenticationReducerDefaultState = {
 
 export default (state = authenticationReducerDefaultState, action) => {
   switch (action.type) {
+    case 'SET_AUTHENTICATED':
+      return {
+        ...state,
+        isAuthenticated: true,
+      };
     case 'START_LOGIN':
       return {
         isFetching: true,

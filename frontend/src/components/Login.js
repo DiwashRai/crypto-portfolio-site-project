@@ -1,13 +1,25 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { startSetUser } from '../actions/userActions';
 import { handleLogin } from '../actions/authenticationActions';
 
 const Login = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const authentication = useSelector((state) => state.authentication);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    dispatch(startSetUser());
+  }, []);
+
+  useEffect(() => {
+    if (authentication.isAuthenticated) {
+      history.push('/dashboard');
+    }
+  }, [authentication]);
 
   return (
     <div className="box-layout">

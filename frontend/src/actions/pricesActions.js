@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const setPrices = (prices) => ({
   type: 'SET_PRICES',
   prices,
@@ -10,12 +12,10 @@ export const startSetPrices = (coinIdArr) => {
       idsValue += coinId + ',';
     });
     const geckoURL = `https://api.coingecko.com/api/v3/simple/price?ids=${idsValue}&vs_currencies=usd&include_24hr_change=true`;
-    fetch(geckoURL)
+    axios
+      .get(geckoURL)
       .then((response) => {
-        return response.json();
-      })
-      .then((prices) => {
-        dispatch(setPrices(prices));
+        dispatch(setPrices(response.data));
       })
       .catch((err) => {
         console.log(err);

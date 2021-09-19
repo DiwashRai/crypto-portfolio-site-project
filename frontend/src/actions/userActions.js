@@ -1,3 +1,6 @@
+import axios from 'axios';
+import { setAuthenticated } from '../actions/authenticationActions';
+
 // SET_USER
 export const setUser = (user) => ({
   type: 'SET_USER',
@@ -6,21 +9,12 @@ export const setUser = (user) => ({
 
 export const startSetUser = () => {
   return (dispatch) => {
-    const config = {
-      method: 'GET',
-      credentials: 'include',
-    };
-
-    return fetch(`${REACT_APP_API_URL}/users/me`, config)
+    return axios
+      .get(`${REACT_APP_API_URL}/users/me`, { withCredentials: true })
       .then((response) => {
-        if (response.status !== 200) {
-          throw new Error('Unable to GET user profile');
-        }
-        return response.json();
-      })
-      .then((user) => {
-        dispatch(setUser(user));
-        return user;
+        dispatch(setUser(response.data));
+        dispatch(setAuthenticated());
+        return response.data;
       })
       .catch((err) => {
         console.log(err);
