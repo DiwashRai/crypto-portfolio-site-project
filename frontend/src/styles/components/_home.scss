@@ -1,0 +1,13 @@
+.home > .content-container {
+  color: $header-grey;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.home {
+  h2, h3 {
+    display: inline-block;
+    text-align: center;
+  }
+}

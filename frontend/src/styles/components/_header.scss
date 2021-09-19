@@ -9,7 +9,7 @@
   }
 
   a {
-    color: #757575;
+    color: $header-grey;
     margin: 0 $s-size;
     text-decoration: none;
     &:hover {
@@ -19,8 +19,12 @@
 }
 
 .header__title {
-  color: #757575;
+  color: $header-grey;
   font-weight: 500;
   margin: 0 auto 0 0;
+
+  a:hover {
+    color: inherit;
+  }
 }
 
