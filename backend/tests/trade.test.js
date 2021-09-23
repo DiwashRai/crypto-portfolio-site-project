@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const request = require('supertest');
 const app = require('../src/app');
@@ -5,10 +6,8 @@ const TradeModel = require('../src/models/TradeModel');
 const UserModel = require('../src/models/UserModel');
 const {
   userOneId,
-  userOne,
   userThreeId,
-  userTwo,
-  userThree,
+  userTwoId,
   tradeOneId,
   tradeTwoId,
   tradeThreeId,
@@ -18,11 +17,17 @@ const {
 
 beforeEach(setupDatabase);
 
+// todo: refresh token changes
 test('Logged in users should be able to add trades', async () => {
+  const userOneAccessToken = jwt.sign(
+    { _id: userOneId.toString() },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: '15m' }
+  );
   const tradeId = new mongoose.Types.ObjectId();
   await request(app)
     .post('/trades')
-    .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+    .set('Authorization', `Bearer ${userOneAccessToken}`)
     .send({
       _id: tradeId.toHexString(),
       tradeDate: Date.now(),
@@ -42,10 +47,16 @@ test('Logged in users should be able to add trades', async () => {
   expect(bookedTrade.owner.toJSON()).toEqual(tradeOwner.toJSON());
 });
 
+// todo: refresh token changes
 test('Should update users balance when trade is added', async () => {
+  const userThreeAccessToken = jwt.sign(
+    { _id: userThreeId.toString() },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: '15m' }
+  );
   await request(app)
     .post('/trades')
-    .set('Authorization', `Bearer ${userThree.tokens[0].token}`)
+    .set('Authorization', `Bearer ${userThreeAccessToken}`)
     .send({
       tradeDate: Date.now(),
       coinId: 'ethereum',
@@ -66,7 +77,7 @@ test('Should update users balance when trade is added', async () => {
 
   await request(app)
     .post('/trades')
-    .set('Authorization', `Bearer ${userThree.tokens[0].token}`)
+    .set('Authorization', `Bearer ${userThreeAccessToken}`)
     .send({
       tradeDate: Date.now(),
       coinId: 'bitcoin',
@@ -86,19 +97,31 @@ test('Should update users balance when trade is added', async () => {
   expect(USDBalance.quantity).toBe(-6700);
 });
 
+// todo: refresh token changes
 test('Should retrieve logged in users trades', async () => {
+  const userOneAccessToken = jwt.sign(
+    { _id: userOneId.toString() },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: '15m' }
+  );
   const response = await request(app)
     .get('/trades')
-    .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+    .set('Authorization', `Bearer ${userOneAccessToken}`)
     .expect(200);
 
   expect(response.body.length).toEqual(3);
 });
 
+// todo: refresh token changes
 test('Should retrieve specific trade by specifying ID', async () => {
+  const userTwoAccessToken = jwt.sign(
+    { _id: userTwoId.toString() },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: '15m' }
+  );
   const response = await request(app)
     .get(`/trades/${tradeFourId}`)
-    .set('Authorization', `Bearer ${userTwo.tokens[0].token}`)
+    .set('Authorization', `Bearer ${userTwoAccessToken}`)
     .expect(200);
 
   const trade = await TradeModel.findById(tradeFourId);
@@ -113,13 +136,19 @@ test('Should retrieve specific trade by specifying ID', async () => {
   });
 });
 
+// todo: refresh token changes
 test('Should allow authorized user to update trade details', async () => {
+  const userTwoAccessToken = jwt.sign(
+    { _id: userTwoId.toString() },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: '15m' }
+  );
   const updatedCoinId = 'bitcoin';
   const updatedQuantity = 0.1;
   const updatedFee = 3;
   const response = await request(app)
     .patch(`/trades/${tradeFourId}`)
-    .set('Authorization', `Bearer ${userTwo.tokens[0].token}`)
+    .set('Authorization', `Bearer ${userTwoAccessToken}`)
     .send({
       coinId: updatedCoinId,
       quantity: updatedQuantity,
@@ -135,11 +164,17 @@ test('Should allow authorized user to update trade details', async () => {
   });
 });
 
+// todo: refresh token changes
 test('Should update the users balance when trades are updated', async () => {
+  const userThreeAccessToken = jwt.sign(
+    { _id: userThreeId.toString() },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: '15m' }
+  );
   const firstTradeId = new mongoose.Types.ObjectId();
   await request(app)
     .post('/trades')
-    .set('Authorization', `Bearer ${userThree.tokens[0].token}`)
+    .set('Authorization', `Bearer ${userThreeAccessToken}`)
     .send({
       _id: firstTradeId,
       tradeDate: Date.now(),
@@ -152,7 +187,7 @@ test('Should update the users balance when trades are updated', async () => {
   const secondTradeId = new mongoose.Types.ObjectId();
   await request(app)
     .post('/trades')
-    .set('Authorization', `Bearer ${userThree.tokens[0].token}`)
+    .set('Authorization', `Bearer ${userThreeAccessToken}`)
     .send({
       _id: secondTradeId,
       tradeDate: Date.now(),
@@ -178,7 +213,7 @@ test('Should update the users balance when trades are updated', async () => {
 
   await request(app)
     .patch(`/trades/${firstTradeId}`)
-    .set('Authorization', `Bearer ${userThree.tokens[0].token}`)
+    .set('Authorization', `Bearer ${userThreeAccessToken}`)
     .send({
       quantity: 100,
       fee: 3,
@@ -198,7 +233,7 @@ test('Should update the users balance when trades are updated', async () => {
 
   await request(app)
     .patch(`/trades/${secondTradeId}`)
-    .set('Authorization', `Bearer ${userThree.tokens[0].token}`)
+    .set('Authorization', `Bearer ${userThreeAccessToken}`)
     .send({
       quantity: 0.5,
       fee: 20,
@@ -219,14 +254,20 @@ test('Should update the users balance when trades are updated', async () => {
 
 // TODO: add test to make sure fields that are not allowed cannot be updated
 
+// todo: refresh token changes
 test('Should allow user to delete their own trade', async () => {
+  const userTwoAccessToken = jwt.sign(
+    { _id: userTwoId.toString() },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: '15m' }
+  );
   // check that the trade exists first
   let trade = await TradeModel.findById(tradeFourId);
   expect(trade).not.toBeNull();
 
   const response = await request(app)
     .delete(`/trades/${tradeFourId}`)
-    .set('Authorization', `Bearer ${userTwo.tokens[0].token}`)
+    .set('Authorization', `Bearer ${userTwoAccessToken}`)
     .expect(200);
 
   // check that the response body contains correct trade details
@@ -245,7 +286,13 @@ test('Should allow user to delete their own trade', async () => {
   expect(trade).toBeNull();
 });
 
+// todo: refresh token changes
 test('Deleting trades should update the users balance', async () => {
+  const userOneAccessToken = jwt.sign(
+    { _id: userOneId.toString() },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: '15m' }
+  );
   let user = await UserModel.findById(userOneId);
   const ethereumBalance = user.coinBalance.find(
     (element) => element.coinId === 'ethereum'
@@ -262,7 +309,7 @@ test('Deleting trades should update the users balance', async () => {
 
   let response = await request(app)
     .delete(`/trades/${tradeOneId}`)
-    .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+    .set('Authorization', `Bearer ${userOneAccessToken}`)
     .expect(200);
 
   user = await UserModel.findById(userOneId);
@@ -280,7 +327,7 @@ test('Deleting trades should update the users balance', async () => {
 
   response = await request(app)
     .delete(`/trades/${tradeTwoId}`)
-    .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+    .set('Authorization', `Bearer ${userOneAccessToken}`)
     .expect(200);
 
   user = await UserModel.findById(userOneId);
@@ -296,7 +343,7 @@ test('Deleting trades should update the users balance', async () => {
 
   response = await request(app)
     .delete(`/trades/${tradeThreeId}`)
-    .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+    .set('Authorization', `Bearer ${userOneAccessToken}`)
     .expect(200);
 
   user = await UserModel.findById(userOneId);

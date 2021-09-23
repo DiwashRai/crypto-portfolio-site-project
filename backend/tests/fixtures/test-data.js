@@ -9,13 +9,6 @@ const userOne = {
   name: 'Luke',
   email: 'luke@testing.com',
   password: 'usetheforce',
-  tokens: [
-    {
-      token: jwt.sign({ _id: userOneId.toString() }, process.env.JWT_SECRET, {
-        expiresIn: '24h',
-      }),
-    },
-  ],
   currencyBalance: [
     {
       currencySymbol: 'usd',
@@ -44,13 +37,6 @@ const userTwo = {
   name: 'HanSolo',
   email: 'han@testing.com',
   password: 'handyhan',
-  tokens: [
-    {
-      token: jwt.sign({ _id: userTwoId.toString() }, process.env.JWT_SECRET, {
-        expiresIn: '24h',
-      }),
-    },
-  ],
   currencyBalance: [
     {
       currencySymbol: 'usd',

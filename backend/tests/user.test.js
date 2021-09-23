@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const request = require('supertest');
 const app = require('../src/app');
@@ -6,6 +7,7 @@ const { userOneId, userOne, setupDatabase } = require('./fixtures/test-data');
 
 beforeEach(setupDatabase);
 
+// todo: refresh token changes
 test('Should sign up new user', async () => {
   const userId = new mongoose.Types.ObjectId();
   const response = await request(app)
@@ -28,13 +30,13 @@ test('Should sign up new user', async () => {
       name: 'Vader',
       email: 'vader@deathstar.com',
     },
-    token: user.tokens[0].token,
   });
 
   // Assert that the password is not stored without hashing
   expect(user.password).not.toBe('iamyourfather');
 });
 
+// todo: refresh token changes
 test('Should reject sign up with an email that is already in use', async () => {
   await request(app)
     .post('/users')
@@ -46,6 +48,7 @@ test('Should reject sign up with an email that is already in use', async () => {
     .expect(400);
 });
 
+// todo: refresh token changes
 test('Should login successfully with correct credentials', async () => {
   const response = await request(app)
     .post('/users/login')
@@ -71,10 +74,16 @@ test('Should logout currently logged in user', async () => {
     .expect(200);
 });
 
+// todo: refresh token changes
 test('Should return the authorized users correct details', async () => {
+  const userOneAccessToken = jwt.sign(
+    { _id: userOneId.toString() },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: '15m' }
+  );
   const response = await request(app)
     .get('/users/me')
-    .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+    .set('Authorization', `Bearer ${userOneAccessToken}`)
     .send()
     .expect(200);
 

@@ -3,7 +3,7 @@ const express = require('express');
 const AuthRouter = express.Router();
 
 // POST
-AuthRouter.post('/auth/token/refresh', async (req, res) => {
+AuthRouter.post('/auth/token/refresh', async (_req, res) => {
   try {
     res.status(200).send();
   } catch {
