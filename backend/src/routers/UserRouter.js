@@ -51,12 +51,12 @@ UserRouter.get('/users/me', auth, async (req, res) => {
 });
 
 // PATCH
-UserRouter.patch('/users/me', (req, res) => {
+UserRouter.patch('/users/me', (_req, res) => {
   res.status(200).send();
 });
 
 // DELETE
-UserRouter.delete('/users/me', (req, res) => {
+UserRouter.delete('/users/me', (_req, res) => {
   res.status(200).send();
 });
 

@@ -2,8 +2,13 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const User = require('../../src/models/UserModel');
 const Trade = require('../../src/models/TradeModel');
+const RefreshToken = require('../../src/models/RefreshTokenModel');
 
 const userOneId = new mongoose.Types.ObjectId();
+const userOneRefreshToken = {
+  token: jwt.sign(userOneId.toString(), process.env.REFRESH_TOKEN_SECRET),
+  user: userOneId,
+};
 const userOne = {
   _id: userOneId,
   name: 'Luke',
@@ -110,7 +115,9 @@ const tradeFour = {
 const setupDatabase = async () => {
   await User.deleteMany();
   await Trade.deleteMany();
+  await RefreshToken.deleteMany();
   await new User(userOne).save();
+  await new RefreshToken(userOneRefreshToken).save();
   await new User(userTwo).save();
   await new User(userThree).save();
   await new Trade(tradeOne).save();
@@ -121,6 +128,7 @@ const setupDatabase = async () => {
 
 module.exports = {
   userOneId,
+  userOneRefreshToken,
   userOne,
   userTwo,
   userTwoId,

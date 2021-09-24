@@ -8,7 +8,13 @@ const RefreshTokenSchema = new mongoose.Schema({
   user: {
     type: mongoose.Types.ObjectId,
   },
-  expiryDate: {
+  createdAt: {
     type: Date,
+    expires: 60 * 60,
+    default: Date.now,
   },
 });
+
+const RefreshTokenModel = mongoose.model('RefreshToken', RefreshTokenSchema);
+
+module.exports = RefreshTokenModel;
