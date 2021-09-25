@@ -5,10 +5,6 @@ const Trade = require('../../src/models/TradeModel');
 const RefreshToken = require('../../src/models/RefreshTokenModel');
 
 const userOneId = new mongoose.Types.ObjectId();
-const userOneRefreshToken = {
-  token: jwt.sign(userOneId.toString(), process.env.REFRESH_TOKEN_SECRET),
-  user: userOneId,
-};
 const userOne = {
   _id: userOneId,
   name: 'Luke',
@@ -34,6 +30,14 @@ const userOne = {
       quantity: 0.5,
     },
   ],
+};
+const userOneRefreshTokenString = jwt.sign(
+  userOneId.toString(),
+  process.env.REFRESH_TOKEN_SECRET
+);
+const userOneRefreshToken = {
+  token: userOneRefreshTokenString,
+  user: userOneId,
 };
 
 const userTwoId = new mongoose.Types.ObjectId();
@@ -62,13 +66,6 @@ const userThree = {
   name: 'Leia',
   email: 'leia@testing.com',
   password: 'princess',
-  tokens: [
-    {
-      token: jwt.sign({ _id: userThreeId.toString() }, process.env.JWT_SECRET, {
-        expiresIn: '24h',
-      }),
-    },
-  ],
   coinBalance: [],
 };
 
@@ -128,7 +125,7 @@ const setupDatabase = async () => {
 
 module.exports = {
   userOneId,
-  userOneRefreshToken,
+  userOneRefreshTokenString,
   userOne,
   userTwo,
   userTwoId,

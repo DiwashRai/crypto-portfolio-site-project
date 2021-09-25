@@ -50,7 +50,7 @@ TradeRouter.get('/trades', auth, async (req, res) => {
   try {
     const usersTrades = await TradeModel.find({ owner: req.user._id });
     res.status(200).send(usersTrades);
-  } catch (e) {
+  } catch (err) {
     res.status(400).send();
   }
 });
@@ -66,7 +66,7 @@ TradeRouter.get('/trades/:id', auth, async (req, res) => {
       res.status(404).send();
     }
     res.status(200).send(trade);
-  } catch (e) {
+  } catch (err) {
     res.status(500).send();
   }
 });
@@ -112,7 +112,7 @@ TradeRouter.patch('/trades/:id', auth, async (req, res) => {
     await req.user.save();
 
     res.status(200).send(trade);
-  } catch (e) {
+  } catch (err) {
     res.status(400).send();
   }
 });
@@ -138,7 +138,7 @@ TradeRouter.delete('/trades/:id', auth, async (req, res) => {
 
     await req.user.save();
     res.status(200).send(trade);
-  } catch (e) {
+  } catch (err) {
     res.status(500).send();
   }
 });

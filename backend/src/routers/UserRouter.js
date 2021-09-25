@@ -1,5 +1,7 @@
+const jwt = require('jsonwebtoken');
 const express = require('express');
 const UserModel = require('../models/UserModel');
+const RefreshTokenModel = require('../models/RefreshTokenModel');
 const auth = require('../middleware/auth');
 
 const UserRouter = express.Router();
@@ -10,8 +12,17 @@ UserRouter.post('/users', async (req, res) => {
 
   try {
     await user.save();
-    const token = await user.generateAuthToken();
-    res.status(201).send({ user, token });
+    const refreshToken = await RefreshTokenModel.createRefreshToken(user);
+    const accessToken = jwt.sign(
+      user._id.toString(),
+      process.env.ACCESS_TOKEN_SECRET
+    );
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+    });
+    res.status(201).send({ user, auth: { accessToken } });
   } catch (err) {
     res.status(400).send(err);
   }
@@ -23,13 +34,17 @@ UserRouter.post('/users/login', async (req, res) => {
       req.body.email,
       req.body.password
     );
-    const token = await user.generateAuthToken();
-    res.cookie('token', token, {
+    const refreshToken = await RefreshTokenModel.createRefreshToken(user);
+    res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       sameSite: 'none',
       secure: true,
     });
-    res.status(200).send({ user, token });
+    const accessToken = jwt.sign(
+      user._id.toString(),
+      process.env.ACCESS_TOKEN_SECRET
+    );
+    res.status(200).send({ user, auth: { accessToken } });
   } catch (err) {
     res.status(400).send();
   }

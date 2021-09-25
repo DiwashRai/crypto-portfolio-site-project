@@ -17,7 +17,6 @@ const {
 
 beforeEach(setupDatabase);
 
-// todo: refresh token changes
 test('Logged in users should be able to add trades', async () => {
   const userOneAccessToken = jwt.sign(
     { _id: userOneId.toString() },
@@ -47,7 +46,6 @@ test('Logged in users should be able to add trades', async () => {
   expect(bookedTrade.owner.toJSON()).toEqual(tradeOwner.toJSON());
 });
 
-// todo: refresh token changes
 test('Should update users balance when trade is added', async () => {
   const userThreeAccessToken = jwt.sign(
     { _id: userThreeId.toString() },
@@ -97,7 +95,6 @@ test('Should update users balance when trade is added', async () => {
   expect(USDBalance.quantity).toBe(-6700);
 });
 
-// todo: refresh token changes
 test('Should retrieve logged in users trades', async () => {
   const userOneAccessToken = jwt.sign(
     { _id: userOneId.toString() },
@@ -112,7 +109,6 @@ test('Should retrieve logged in users trades', async () => {
   expect(response.body.length).toEqual(3);
 });
 
-// todo: refresh token changes
 test('Should retrieve specific trade by specifying ID', async () => {
   const userTwoAccessToken = jwt.sign(
     { _id: userTwoId.toString() },
@@ -136,7 +132,6 @@ test('Should retrieve specific trade by specifying ID', async () => {
   });
 });
 
-// todo: refresh token changes
 test('Should allow authorized user to update trade details', async () => {
   const userTwoAccessToken = jwt.sign(
     { _id: userTwoId.toString() },
@@ -164,7 +159,6 @@ test('Should allow authorized user to update trade details', async () => {
   });
 });
 
-// todo: refresh token changes
 test('Should update the users balance when trades are updated', async () => {
   const userThreeAccessToken = jwt.sign(
     { _id: userThreeId.toString() },
@@ -254,7 +248,6 @@ test('Should update the users balance when trades are updated', async () => {
 
 // TODO: add test to make sure fields that are not allowed cannot be updated
 
-// todo: refresh token changes
 test('Should allow user to delete their own trade', async () => {
   const userTwoAccessToken = jwt.sign(
     { _id: userTwoId.toString() },
@@ -286,7 +279,6 @@ test('Should allow user to delete their own trade', async () => {
   expect(trade).toBeNull();
 });
 
-// todo: refresh token changes
 test('Deleting trades should update the users balance', async () => {
   const userOneAccessToken = jwt.sign(
     { _id: userOneId.toString() },

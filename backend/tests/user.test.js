@@ -7,7 +7,6 @@ const { userOneId, userOne, setupDatabase } = require('./fixtures/test-data');
 
 beforeEach(setupDatabase);
 
-// todo: refresh token changes
 test('Should sign up new user', async () => {
   const userId = new mongoose.Types.ObjectId();
   const response = await request(app)
@@ -24,19 +23,39 @@ test('Should sign up new user', async () => {
   const user = await User.findById(userId);
   expect(user).not.toBeNull();
 
-  // Assert that the response contains the correct user details and a token
-  expect(response.body).toMatchObject({
-    user: {
-      name: 'Vader',
-      email: 'vader@deathstar.com',
-    },
+  // Assert that the response contains the correct user details
+  const { user: userData, auth } = response.body;
+  expect(userData).toMatchObject({
+    name: 'Vader',
+    email: 'vader@deathstar.com',
   });
+
+  // Assert that the response contains a valid accessToken
+  expect(auth).toBeDefined();
+  const { accessToken } = auth;
+  const decodedAccessToken = jwt.verify(
+    accessToken,
+    process.env.ACCESS_TOKEN_SECRET
+  );
+  expect(decodedAccessToken).toMatch(userId.toString());
 
   // Assert that the password is not stored without hashing
   expect(user.password).not.toBe('iamyourfather');
+
+  // Assert refresh token is set in cookie
+  const setCookie = response.header['set-cookie'][0];
+  expect(setCookie).toBeDefined();
+  const cookie = setCookie.substr(0, setCookie.indexOf(';')).split('=');
+  expect(cookie[0]).toMatch('refreshToken');
+
+  // Assert refresh token decodes to correct user id
+  const decodedRefreshToken = jwt.verify(
+    cookie[1],
+    process.env.REFRESH_TOKEN_SECRET
+  );
+  expect(decodedRefreshToken).toMatch(userId.toString());
 });
 
-// todo: refresh token changes
 test('Should reject sign up with an email that is already in use', async () => {
   await request(app)
     .post('/users')
@@ -48,7 +67,6 @@ test('Should reject sign up with an email that is already in use', async () => {
     .expect(400);
 });
 
-// todo: refresh token changes
 test('Should login successfully with correct credentials', async () => {
   const response = await request(app)
     .post('/users/login')
@@ -57,24 +75,31 @@ test('Should login successfully with correct credentials', async () => {
       password: userOne.password,
     })
     .expect(200);
+  const { user: userData, auth } = response.body;
 
-  // make sure password is removed from response
-  expect(response.body.password).toBeFalsy();
+  // Assert password is removed from response
+  expect(userData.password).toBeFalsy();
 
-  // check the jwt token is created and sent in the response
-  const user = await User.findById(userOneId);
-  expect(response.body.token).toBe(user.tokens[1].token);
+  // Assert auth object is returned and contains accessToken
+  expect(auth).toBeDefined();
+  const { accessToken } = response.body.auth;
+  const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+  expect(decoded).toMatch(userOneId.toString());
+
+  // Assert refresh token is set in cookie
+  const setCookie = response.header['set-cookie'][0];
+  expect(setCookie).toBeDefined();
+  const cookie = setCookie.substr(0, setCookie.indexOf(';')).split('=');
+  expect(cookie[0]).toMatch('refreshToken');
+
+  // Assert refresh token decodes to correct user id
+  const decodedRefreshToken = jwt.verify(
+    cookie[1],
+    process.env.REFRESH_TOKEN_SECRET
+  );
+  expect(decodedRefreshToken).toMatch(userOneId.toString());
 });
 
-test('Should logout currently logged in user', async () => {
-  await request(app)
-    .post('/users/logout')
-    .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
-    .send()
-    .expect(200);
-});
-
-// todo: refresh token changes
 test('Should return the authorized users correct details', async () => {
   const userOneAccessToken = jwt.sign(
     { _id: userOneId.toString() },

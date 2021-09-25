@@ -22,14 +22,6 @@ const UserSchema = new mongoose.Schema(
       minlength: 7,
       trim: true,
     },
-    tokens: [
-      {
-        token: {
-          type: String,
-          required: true,
-        },
-      },
-    ],
     currencyBalance: [
       {
         _id: false,
@@ -87,24 +79,11 @@ UserSchema.statics.findByCredentials = async (email, password) => {
   return user;
 };
 
-UserSchema.methods.generateAuthToken = async function generateAuthToken() {
-  const user = this;
-
-  const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: '24h',
-  });
-
-  user.tokens = user.tokens.concat({ token });
-  await user.save();
-  return token;
-};
-
 UserSchema.methods.toJSON = function toJSON() {
   const user = this;
   const userObject = user.toObject();
 
   delete userObject.password;
-  delete userObject.tokens;
 
   return userObject;
 };

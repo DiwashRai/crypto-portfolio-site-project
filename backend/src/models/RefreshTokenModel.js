@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
 const RefreshTokenSchema = new mongoose.Schema({
@@ -14,6 +15,21 @@ const RefreshTokenSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+RefreshTokenSchema.statics.createRefreshToken =
+  async function createRefreshToken(user) {
+    const token = jwt.sign(
+      user._id.toString(),
+      process.env.REFRESH_TOKEN_SECRET
+    );
+    const refreshToken = new RefreshTokenModel({
+      token,
+      user: user._id,
+    });
+    await refreshToken.save();
+
+    return token;
+  };
 
 const RefreshTokenModel = mongoose.model('RefreshToken', RefreshTokenSchema);
 

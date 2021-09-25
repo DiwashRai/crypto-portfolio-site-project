@@ -15,7 +15,7 @@ app.use(UserRouter);
 app.use(TradeRouter);
 app.use(AuthRouter);
 
-app.get('*', (req, res) => {
+app.get('*', (_req, res) => {
   res.status(404).send({ error: 'Invalid route' });
 });
 

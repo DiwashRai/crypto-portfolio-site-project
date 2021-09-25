@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const express = require('express');
+const RefreshTokenModel = require('../models/RefreshTokenModel');
 
 const AuthRouter = express.Router();
 
@@ -7,15 +8,41 @@ const AuthRouter = express.Router();
 AuthRouter.post('/auth/token/refresh', async (req, res) => {
   try {
     const { refreshToken } = req.cookies;
-    if (!refreshToken) {
-      res.status(401).send({ error: 'Please authenticate.' });
-      return;
-    }
+    if (!refreshToken) throw new Error();
 
     const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-    res.status(200).send();
-  } catch (e) {
+    const token = await RefreshTokenModel.findOne({
+      token: refreshToken,
+      user: decoded,
+    });
+
+    if (token) {
+      const accessToken = jwt.sign(decoded, process.env.ACCESS_TOKEN_SECRET);
+      res.status(200).send({ accessToken });
+      return;
+    }
     res.status(401).send({ error: 'Please authenticate.' });
+  } catch (err) {
+    res.status(401).send({ error: 'Please authenticate.' });
+  }
+});
+
+// DELETE
+AuthRouter.delete('/auth/token/revoke', async (req, res) => {
+  try {
+    const { refreshToken } = req.cookies;
+    if (!refreshToken) throw new Error();
+
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const token = await RefreshTokenModel.findOneAndDelete({
+      token: refreshToken,
+      user: decoded,
+    });
+    if (!token) throw new Error();
+    res.clearCookie('refreshToken');
+    res.status(200).send();
+  } catch (err) {
+    res.status(400).send();
   }
 });
 
