@@ -1,8 +1,8 @@
-const jwt = require('jsonwebtoken');
 const express = require('express');
 const UserModel = require('../models/UserModel');
 const RefreshTokenModel = require('../models/RefreshTokenModel');
 const auth = require('../middleware/auth');
+const createAccessToken = require('../utils/accessToken');
 
 const UserRouter = express.Router();
 
@@ -13,10 +13,7 @@ UserRouter.post('/users', async (req, res) => {
   try {
     await user.save();
     const refreshToken = await RefreshTokenModel.createRefreshToken(user);
-    const accessToken = jwt.sign(
-      user._id.toString(),
-      process.env.ACCESS_TOKEN_SECRET
-    );
+    const accessToken = createAccessToken(user._id.toString());
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       sameSite: 'none',
@@ -40,10 +37,7 @@ UserRouter.post('/users/login', async (req, res) => {
       sameSite: 'none',
       secure: true,
     });
-    const accessToken = jwt.sign(
-      user._id.toString(),
-      process.env.ACCESS_TOKEN_SECRET
-    );
+    const accessToken = createAccessToken(user._id.toString());
     res.status(200).send({ user, auth: { accessToken } });
   } catch (err) {
     res.status(400).send();

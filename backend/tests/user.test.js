@@ -37,7 +37,7 @@ test('Should sign up new user', async () => {
     accessToken,
     process.env.ACCESS_TOKEN_SECRET
   );
-  expect(decodedAccessToken).toMatch(userId.toString());
+  expect(decodedAccessToken._id).toMatch(userId.toString());
 
   // Assert that the password is not stored without hashing
   expect(user.password).not.toBe('iamyourfather');
@@ -84,7 +84,7 @@ test('Should login successfully with correct credentials', async () => {
   expect(auth).toBeDefined();
   const { accessToken } = response.body.auth;
   const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
-  expect(decoded).toMatch(userOneId.toString());
+  expect(decoded._id).toMatch(userOneId.toString());
 
   // Assert refresh token is set in cookie
   const setCookie = response.header['set-cookie'][0];

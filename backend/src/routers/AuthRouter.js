@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const RefreshTokenModel = require('../models/RefreshTokenModel');
+const createAccessToken = require('../utils/accessToken');
 
 const AuthRouter = express.Router();
 
@@ -17,7 +18,7 @@ AuthRouter.post('/auth/token/refresh', async (req, res) => {
     });
 
     if (token) {
-      const accessToken = jwt.sign(decoded, process.env.ACCESS_TOKEN_SECRET);
+      const accessToken = createAccessToken(decoded);
       res.status(200).send({ accessToken });
       return;
     }

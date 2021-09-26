@@ -23,7 +23,7 @@ test('Should return access token to request with valid refresh token', async () 
   expect(accessToken).toBeDefined();
 
   const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
-  expect(decoded).toBe(userOneId.toString());
+  expect(decoded._id).toBe(userOneId.toString());
 });
 
 test('Should reject refresh request with no token', async () => {
