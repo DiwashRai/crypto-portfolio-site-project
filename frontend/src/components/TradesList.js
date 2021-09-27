@@ -1,16 +1,10 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { selectTrades } from '../reducers/tradesReducer';
-import { startSetTrades } from '../actions/tradesActions';
 import TradesListItem from './TradesListItem';
 
 const TradesList = () => {
   const trades = useSelector((state) => selectTrades(state));
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(startSetTrades());
-  }, []);
 
   return (
     <div className="ui-card">

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../helpers/axios';
 
 // SET_AUTHENTICATED
 export const setAuthenticated = () => ({
@@ -11,8 +11,9 @@ export const startLogin = () => ({
 });
 
 // LOGIN_SUCCESS
-export const loginSuccess = () => ({
+export const loginSuccess = ({ accessToken }) => ({
   type: 'LOGIN_SUCCESS',
+  accessToken,
 });
 
 // LOGIN_FAILURE
@@ -37,7 +38,12 @@ export const handleLogin = (email, password) => {
       )
       .then((result) => {
         console.log(result.data);
-        dispatch(loginSuccess());
+        const { auth } = result.data;
+        if (auth) {
+          dispatch(loginSuccess(auth));
+        } else {
+          throw new Error('auth payload not received upon logon.');
+        }
       })
       .catch((err) => {
         dispatch(loginFailure());
@@ -45,3 +51,9 @@ export const handleLogin = (email, password) => {
       });
   };
 };
+
+// REFRESH_ACCESS_TOKEN
+export const refreshAccessToken = ({ accessToken }) => ({
+  type: 'REFRESH_ACCESS_TOKEN',
+  accessToken,
+});

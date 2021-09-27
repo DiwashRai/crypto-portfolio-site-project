@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectTotalOriginalValue } from '../reducers/tradesReducer';
 import { selectCryptoOverview } from '../selectors/cryptoOverviewSelector';
+import { toUSD } from '../helpers/formatting';
 
 const ReturnSummary = () => {
   const totalOriginalValue = useSelector((state) =>
@@ -41,12 +42,8 @@ const ReturnSummary = () => {
         </thead>
         <tbody>
           <tr>
-            <td className="table__number-cell">
-              {totalOriginalValue.toFixed(2)}
-            </td>
-            <td className="table__number-cell">
-              {totalCurrentValue.toFixed(2)}
-            </td>
+            <td className="table__number-cell">{toUSD(totalOriginalValue)}</td>
+            <td className="table__number-cell">{toUSD(totalCurrentValue)}</td>
             <td
               className={`table__number-cell ${
                 totalValueChange > 0
@@ -54,7 +51,7 @@ const ReturnSummary = () => {
                   : 'table__number-cell--negative'
               }`}
             >
-              {totalValueChange.toFixed(2)}
+              {toUSD(totalValueChange)}
             </td>
             <td
               className={`table__number-cell ${

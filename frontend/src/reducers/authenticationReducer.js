@@ -1,6 +1,7 @@
 const authenticationReducerDefaultState = {
   isFetching: false,
   isAuthenticated: false,
+  accessToken: undefined,
 };
 
 export default (state = authenticationReducerDefaultState, action) => {
@@ -19,11 +20,18 @@ export default (state = authenticationReducerDefaultState, action) => {
       return {
         isFetching: false,
         isAuthenticated: true,
+        accessToken: action.accessToken,
       };
     case 'LOGIN_FAILURE':
       return {
         isFetching: false,
         isAuthenticated: false,
+        accessToken: undefined,
+      };
+    case 'REFRESH_ACCESS_TOKEN':
+      return {
+        ...state,
+        accessToken: action.accessToken,
       };
     default:
       return state;

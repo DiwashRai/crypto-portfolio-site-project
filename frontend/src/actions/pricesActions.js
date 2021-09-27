@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../helpers/axios';
 
 export const setPrices = (prices) => ({
   type: 'SET_PRICES',

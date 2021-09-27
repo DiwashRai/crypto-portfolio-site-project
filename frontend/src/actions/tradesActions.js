@@ -1,24 +1,20 @@
+import axios from '../helpers/axios';
+
 // SET_TRADES
 export const setTrades = (trades) => ({
   type: 'SET_TRADES',
   trades,
 });
 
-export const startSetTrades = () => {
+export const startSetTrades = (accessToken) => {
   return (dispatch) => {
-    const config = {
-      method: 'GET',
-      credentials: 'include',
-    };
-
-    fetch(`${REACT_APP_API_URL}/trades`, config)
-      .then((response) => {
-        if (response.status !== 200) {
-          throw new Error('Unable to GET /trades');
-        }
-        return response.json();
+    return axios
+      .get(`${REACT_APP_API_URL}/trades`, {
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${accessToken}` },
       })
-      .then((trades) => {
+      .then((response) => {
+        const trades = response.data;
         dispatch(setTrades(trades));
       })
       .catch((err) => {
@@ -33,8 +29,8 @@ export const addTrade = (trade) => ({
   trade,
 });
 
-export const startAddTrade = (tradeData = {}) => {
-  return (dispatch) => {
+export const startAddTrade = (tradeData = {}, accessToken) => {
+  return () => {
     const {
       tradeDate = '',
       coinId = '',
@@ -44,21 +40,10 @@ export const startAddTrade = (tradeData = {}) => {
     } = tradeData;
     const trade = { tradeDate, coinId, quantity, cost, fee };
 
-    const config = {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(trade),
-    };
-
-    fetch(`${REACT_APP_API_URL}/trades`, config)
-      .then((response) => {
-        if (response.status !== 201) {
-          throw new Error(response.err);
-        }
-        return response.json();
+    axios
+      .post(`${REACT_APP_API_URL}/trades`, trade, {
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then((result) => {
         console.log(result);
@@ -76,7 +61,7 @@ export const editTrade = (trade) => ({
 });
 
 export const startEditTrade = (id, updates) => {
-  return (dispatch) => {
+  return (_dispatch) => {
     const config = {
       method: 'PATCH',
       credentials: 'include',
@@ -102,28 +87,37 @@ export const startEditTrade = (id, updates) => {
   };
 };
 
+export const startEditTradeAxios = (id, updates, accessToken) => {
+  return (_dispatch) => {
+    axios
+      .patch(`${REACT_APP_API_URL}/trades/${id}`, updates, {
+        withCredentials: true,
+        headers: { authorization: `bearer ${accessToken}` },
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
 // DELETE_TRADE
 export const deleteTrade = (id) => ({
   type: 'DELETE_TRADE',
   id,
 });
 
-export const startDeleteTrade = (id) => {
-  return (dispatch) => {
-    const config = {
-      method: 'DELETE',
-      credentials: 'include',
-    };
-
-    fetch(`${REACT_APP_API_URL}/trades/${id}`, config)
-      .then((response) => {
-        if (response.status !== 200) {
-          throw new Error(`Unable to delete trade with id: ${id}`);
-        }
-        return response.json();
+export const startDeleteTrade = (id, accessToken) => {
+  return (_dispatch) => {
+    axios
+      .delete(`${REACT_APP_API_URL}/trades/${id}`, {
+        withCredentials: true,
+        headers: { authorization: `bearer ${accessToken}` },
       })
-      .then((result) => {
-        console.log(result);
+      .then((response) => {
+        console.log(response.data);
       })
       .catch((err) => {
         console.log(err);

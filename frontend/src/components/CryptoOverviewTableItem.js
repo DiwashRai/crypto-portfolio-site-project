@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import { toUSD } from '../helpers/formatting';
 
 const CryptoOverviewTableItem = memo((props) => {
   return (
@@ -14,9 +15,9 @@ const CryptoOverviewTableItem = memo((props) => {
         {`${props.usdChange24h.toFixed(2)}%`}
       </td>
       <td className="table__number-cell">{props.quantity.toFixed(2)}</td>
-      <td className="table__number-cell">{props.currentPrice}</td>
-      <td className="table__number-cell">{props.netInvestment.toFixed(2)}</td>
-      <td className="table__number-cell">{props.currentValue.toFixed(2)}</td>
+      <td className="table__number-cell">{toUSD(props.currentPrice)}</td>
+      <td className="table__number-cell">{toUSD(props.netInvestment)}</td>
+      <td className="table__number-cell">{toUSD(props.currentValue)}</td>
       <td
         className={`table__number-cell ${
           props.profitAndLoss > 0
@@ -24,7 +25,7 @@ const CryptoOverviewTableItem = memo((props) => {
             : 'table__number-cell--negative'
         }`}
       >
-        {props.profitAndLoss.toFixed(2)}
+        {toUSD(props.profitAndLoss)}
       </td>
       <td
         className={`table__number-cell ${
