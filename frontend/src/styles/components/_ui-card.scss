@@ -1,10 +1,11 @@
 .ui-card {
-  margin: $m-size auto;
+  margin: 0 auto $m-size auto;
   background: white;
   border: 1px solid $ui-card-line;
   border-radius: 5px;
+  display: inline-block;
   font-size: $font-size-small;
-  max-width: 80rem;
+  width: 100%;
   padding: $s-size;
 }
 

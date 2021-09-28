@@ -1,3 +1,14 @@
 .dashboard {
   padding: $m-size;
+  display: flex;
+  justify-content: center;
+
+  &__left-side {
+    margin: 0 $m-size;
+  }
+
+  &__center {
+    display: flex;
+    flex-direction: column;
+  }
 }

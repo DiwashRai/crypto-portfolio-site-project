@@ -1,0 +1,18 @@
+.details {
+  width: 35rem;
+
+  &__row {
+    color: $dark-grey;
+    display: flex;
+    justify-content: space-between;
+    margin: 0.5rem 0;
+
+    &__value--positive {
+      color: $positive-green;
+    }
+
+    &__value--negative {
+      color: $negative-red;
+    }
+  }
+}

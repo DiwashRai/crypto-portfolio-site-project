@@ -31,41 +31,41 @@ const ReturnSummary = () => {
       <div className="ui-card__title">
         <span>RETURN SUMMARY</span>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th className="table__number-cell">Total Original Value</th>
-            <th className="table__number-cell">Total Current Value</th>
-            <th className="table__number-cell">Total Value Change</th>
-            <th className="table__number-cell">Percent Change</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="table__number-cell">{toUSD(totalOriginalValue)}</td>
-            <td className="table__number-cell">{toUSD(totalCurrentValue)}</td>
-            <td
-              className={`table__number-cell ${
+      <div className="ui-card__content">
+        <div className="details">
+          <div className="details__row">
+            <div>Total Original Value</div>
+            <div>{toUSD(totalOriginalValue)}</div>
+          </div>
+          <div className="details__row">
+            <div>Total Current Value</div>
+            <div>{toUSD(totalCurrentValue)}</div>
+          </div>
+          <hr />
+          <div className="details__row">
+            <div>Total Value Change</div>
+            <div
+              className={`${
                 totalValueChange > 0
-                  ? 'table__number-cell--positive'
-                  : 'table__number-cell--negative'
+                  ? 'details__row__value--positive'
+                  : 'details__row__value--negative'
               }`}
             >
               {toUSD(totalValueChange)}
-            </td>
-            <td
-              className={`table__number-cell ${
+            </div>
+          </div>
+          <div className="details__row">
+            <div>Percent Change</div>
+            <div
+              className={`${
                 percentChange > 0
-                  ? 'table__number-cell--positive'
-                  : 'table__number-cell--negative'
+                  ? 'details__row__value--positive'
+                  : 'details__row__value--negative'
               }`}
-            >
-              {`${percentChange.toFixed(2)}%`}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div className="ui-card__content"></div>
+            >{`${percentChange.toFixed(2)}%`}</div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

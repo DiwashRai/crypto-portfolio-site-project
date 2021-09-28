@@ -24,9 +24,13 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <ReturnSummary />
-      <CryptoOverview />
-      <TradesList />
+      <div className="dashboard__left-side">
+        <ReturnSummary />
+      </div>
+      <div className="dashboard__center">
+        <CryptoOverview />
+        <TradesList />
+      </div>
     </div>
   );
 };
