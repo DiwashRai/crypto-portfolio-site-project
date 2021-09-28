@@ -3,10 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import TradeForm from './TradeForm';
 import { selectTradeById } from '../reducers/tradesReducer';
-import {
-  startEditTradeAxios,
-  startDeleteTrade,
-} from '../actions/tradesActions';
+import { startEditTrade, startDeleteTrade } from '../actions/tradesActions';
 
 const EditTradePage = (props) => {
   const dispatch = useDispatch();
@@ -16,8 +13,8 @@ const EditTradePage = (props) => {
     selectTradeById(state, props.match.params.id)
   );
 
-  const onSubmitEdit = (trade) => {
-    dispatch(startEditTradeAxios(trade._id, trade, auth.accessToken));
+  const onSubmitEdit = (tradeData) => {
+    dispatch(startEditTrade(trade._id, tradeData, auth.accessToken));
     history.push('/dashboard');
   };
 
