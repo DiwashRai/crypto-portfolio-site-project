@@ -8,7 +8,8 @@ const AuthRouter = require('./routers/AuthRouter');
 
 const app = express();
 
-app.use(cors({ origin: true, credentials: true }));
+// app.use(cors({ origin: true, credentials: true }));
+app.use(cors({ origin: 'https//coinsensus.app', credentials: true }));
 app.use(cookieParser());
 app.use(express.json());
 app.use(UserRouter);
