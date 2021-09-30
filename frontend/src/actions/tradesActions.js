@@ -6,12 +6,13 @@ export const setTrades = (trades) => ({
   trades,
 });
 
-export const startSetTrades = (accessToken) => {
-  return (dispatch) => {
+export const startSetTrades = () => {
+  return (dispatch, getState) => {
+    const { authentication } = getState();
     return axios
       .get(`${REACT_APP_API_URL}/trades`, {
         withCredentials: true,
-        headers: { Authorization: `Bearer ${accessToken}` },
+        headers: { Authorization: `Bearer ${authentication.accessToken}` },
       })
       .then((response) => {
         const trades = response.data;
@@ -29,8 +30,9 @@ export const addTrade = (trade) => ({
   trade,
 });
 
-export const startAddTrade = (tradeData = {}, accessToken) => {
-  return () => {
+export const startAddTrade = (tradeData = {}) => {
+  return (_dispatch, getState) => {
+    const { authentication } = getState();
     const {
       tradeDate = '',
       coinId = '',
@@ -40,10 +42,10 @@ export const startAddTrade = (tradeData = {}, accessToken) => {
     } = tradeData;
     const trade = { tradeDate, coinId, quantity, cost, fee };
 
-    axios
+    return axios
       .post(`${REACT_APP_API_URL}/trades`, trade, {
         withCredentials: true,
-        headers: { Authorization: `Bearer ${accessToken}` },
+        headers: { Authorization: `Bearer ${authentication.accessToken}` },
       })
       .then((result) => {
         console.log(result);
@@ -60,15 +62,17 @@ export const editTrade = (trade) => ({
   trade,
 });
 
-export const startEditTrade = (id, updates, accessToken) => {
-  return (_dispatch) => {
-    axios
+export const startEditTrade = (id, updates) => {
+  return (_dispatch, getState) => {
+    const { authentication } = getState();
+    return axios
       .patch(`${REACT_APP_API_URL}/trades/${id}`, updates, {
         withCredentials: true,
-        headers: { authorization: `Bearer ${accessToken}` },
+        headers: { authorization: `Bearer ${authentication.accessToken}` },
       })
       .then((response) => {
         console.log(response.data);
+        return response.data;
       })
       .catch((err) => {
         console.log(err);
@@ -82,15 +86,17 @@ export const deleteTrade = (id) => ({
   id,
 });
 
-export const startDeleteTrade = (id, accessToken) => {
-  return (_dispatch) => {
-    axios
+export const startDeleteTrade = (id) => {
+  return (_dispatch, getState) => {
+    const { authentication } = getState();
+    return axios
       .delete(`${REACT_APP_API_URL}/trades/${id}`, {
         withCredentials: true,
-        headers: { authorization: `Bearer ${accessToken}` },
+        headers: { authorization: `Bearer ${authentication.accessToken}` },
       })
       .then((response) => {
         console.log(response.data);
+        return response.data;
       })
       .catch((err) => {
         console.log(err);

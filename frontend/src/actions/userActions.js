@@ -7,12 +7,13 @@ export const setUser = (user) => ({
   user,
 });
 
-export const startSetUser = (accessToken) => {
-  return (dispatch) => {
+export const startSetUser = () => {
+  return (dispatch, getState) => {
+    const { authentication } = getState();
     return axios
       .get(`${REACT_APP_API_URL}/users/me`, {
         withCredentials: true,
-        headers: { Authorization: `Bearer ${accessToken}` },
+        headers: { Authorization: `Bearer ${authentication.accessToken}` },
       })
       .then((response) => {
         dispatch(setUser(response.data));

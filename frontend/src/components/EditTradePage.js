@@ -8,18 +8,17 @@ import { startEditTrade, startDeleteTrade } from '../actions/tradesActions';
 const EditTradePage = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const auth = useSelector((state) => state.authentication);
   const trade = useSelector((state) =>
     selectTradeById(state, props.match.params.id)
   );
 
   const onSubmitEdit = (tradeData) => {
-    dispatch(startEditTrade(trade._id, tradeData, auth.accessToken));
+    dispatch(startEditTrade(trade._id, tradeData));
     history.push('/dashboard');
   };
 
   const onDelete = () => {
-    dispatch(startDeleteTrade(trade._id, auth.accessToken));
+    dispatch(startDeleteTrade(trade._id));
     history.push('/dashboard');
   };
 

@@ -12,10 +12,10 @@ const Dashboard = () => {
   const auth = useSelector((state) => state.authentication);
 
   useEffect(() => {
-    dispatch(startSetUser(auth.accessToken))
+    dispatch(startSetUser())
       .then((user) => {
         dispatch(startSetPrices(user.coinBalance.map((coin) => coin.coinId)));
-        dispatch(startSetTrades(auth.accessToken));
+        dispatch(startSetTrades());
       })
       .catch((err) => {
         console.log(err);

@@ -19,20 +19,36 @@ th {
   font-weight: 400;
 }
 
-.table__edit-cell {
-  width: 30px;
+.table {
+  &__edit-cell {
+    width: 70px;
+  }
+
+  &__icon-cell {
+    line-height: 100%;
+    text-align: center;
+  }
+
+  &__number-cell {
+    text-align: right;
+
+    &--positive {
+      color: $positive-green;
+    }
+
+    &--negative {
+      color: $negative-red;
+    }
+  }
 }
 
-.table__number-cell {
-  text-align: right;
+.table__row--editing .user-input {
+  border: 1.1px solid #f8b500;
+  //background: rgba(249, 181, 0, 0.1)
+}
 
-  &--positive {
-    color: $positive-green;
-  }
-
-  &--negative {
-    color: $negative-red;
-  }
+.table__row--editing #editTrade {
+  color: #f8b500;
 }
 
 td, td > a {
@@ -41,4 +57,10 @@ td, td > a {
 
 td > a:hover {
   color: $watermelon;
+}
+
+table input {
+  background: transparent;
+  border: none;
+  width: 80px;
 }

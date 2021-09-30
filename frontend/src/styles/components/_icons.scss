@@ -1,0 +1,25 @@
+.material-icons.md-18 {
+  font-size: 18px;
+}
+
+#editTrade {
+  &:hover {
+    color: orange;
+    cursor: pointer;
+  }
+}
+
+#deleteTrade {
+  &:hover {
+    color: red;
+    cursor: pointer;
+  }
+}
+
+#checkCircle {
+  &:hover {
+    color: $positive-green;
+    cursor: pointer;
+  }
+}
+

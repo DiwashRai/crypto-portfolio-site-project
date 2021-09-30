@@ -28,6 +28,7 @@ const TradeSchema = new mongoose.Schema(
     },
     fee: {
       type: Number,
+      default: 0,
     },
     total: {
       type: Number,
