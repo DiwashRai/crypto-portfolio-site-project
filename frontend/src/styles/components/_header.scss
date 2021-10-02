@@ -16,11 +16,16 @@
       color: black;
     }
   }
+
+  .ui.header {
+    margin: 0 1.2rem;
+  }
 }
 
 .header__title {
   color: $header-grey;
   font-weight: 500;
+  font-size: $header-font-size-large;
   margin: 0 auto 0 0;
 
   a:hover {

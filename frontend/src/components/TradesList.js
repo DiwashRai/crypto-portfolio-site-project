@@ -2,21 +2,79 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectTrades } from '../reducers/tradesReducer';
 import { useTable } from 'react-table';
-import moment from 'moment';
+import { parseISO } from 'date-fns';
 import { toUSD } from '../helpers/formatting';
+import { Input } from 'semantic-ui-react';
 import EditableCell from './EditableCell';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import {
+  startAddTrade,
   startEditTrade,
   startDeleteTrade,
   startSetTrades,
 } from '../actions/tradesActions';
+import { startSetUser } from '../actions/userActions';
 
 const TradesList = () => {
   const dispatch = useDispatch();
   const trades = useSelector((state) => selectTrades(state));
   const [data, setData] = useState(trades);
+
+  const [addTradeDate, setAddTradeDate] = useState(
+    new Date(new Date().setHours(0, 0, 0, 0))
+  );
+  const [addTradeCoinId, setAddTradeCoinId] = useState('');
+  const [addTradeQuantity, setAddTradeQuantity] = useState('');
+  const [addTradeCost, setAddTradeCost] = useState('');
+  const [addTradeFee, setAddTradeFee] = useState('');
+  const [addTradeTotal, setAddTradeTotal] = useState('');
+  const [addTradePrice, setAddTradePrice] = useState('');
+
+  const onAddTradeDateChange = (addTradeDate) => {
+    setAddTradeDate(addTradeDate);
+  };
+
+  const onAddTradeCoinIdChange = (e) => {
+    const coinId = e.target.value;
+    if (!coinId || coinId.match(/^[a-z]+$/)) {
+      setAddTradeCoinId(coinId);
+    }
+  };
+
+  const onAddTradeQuantityChange = (e) => {
+    const quantity = e.target.value;
+    if (!quantity || quantity.match(/^\d{1,}(\.\d{0,8})?$/)) {
+      setAddTradeQuantity(e.target.value);
+    }
+  };
+
+  const onAddTradeCostChange = (e) => {
+    const cost = e.target.value;
+    if (!cost || cost.match(/^\d{1,}(\.\d{0,8})?$/)) {
+      setAddTradeCost(cost);
+    }
+  };
+
+  const onAddTradeFeeChange = (e) => {
+    const fee = e.target.value;
+    if (!fee || fee.match(/^\d{1,}(\.\d{0,8})?$/)) {
+      setAddTradeFee(fee);
+    }
+  };
+
+  useEffect(() => {
+    const cost = addTradeCost ? parseFloat(addTradeCost) : 0;
+    const fee = addTradeFee ? parseFloat(addTradeFee) : 0;
+    setAddTradeTotal(cost + fee);
+  }, [addTradeCost, addTradeFee]);
+
+  useEffect(() => {
+    if (!addTradeQuantity) return setAddTradePrice('');
+    const total = parseFloat(addTradeTotal);
+    const quantity = parseFloat(addTradeQuantity);
+    if (quantity === 0) return setAddTradePrice('');
+    else setAddTradePrice((total / quantity).toFixed(2));
+  }, [addTradeTotal, addTradeQuantity]);
 
   useEffect(() => {
     setData(
@@ -32,37 +90,72 @@ const TradesList = () => {
       Header: 'Date',
       accessor: 'tradeDate',
       className: 'user-input',
-      Cell: ({ value }) => moment(value).format('Do MMM YYYY'),
+      Cell: (props) => (
+        <DatePicker
+          dateFormat={'dd-MM-yyyy'}
+          selected={parseISO(props.value)}
+          onChange={(date) => {
+            updateMyData(props.row.index, props.column.id, date.toISOString());
+          }}
+          readOnly={!props.row.original.isEditing}
+        />
+      ),
     },
     {
       Header: 'Crypto',
       accessor: 'coinId',
       className: 'user-input',
-      Cell: EditableCell,
+      Cell: (props) => (
+        <EditableCell
+          {...props}
+          toStoreType={(string) => string}
+          toDisplayFormat={(string) => string}
+          valueRegex={/^[a-z]+$/}
+          defaultValue={'...'}
+        />
+      ),
     },
     {
       Header: 'Quantity',
       accessor: 'quantity',
       className: 'table__number-cell user-input',
-      //Cell: ({ value }) => value.toFixed(2),
-      Cell: EditableCell,
+      Cell: (props) => (
+        <EditableCell
+          {...props}
+          toStoreType={(string) => parseFloat(string)}
+          toDisplayFormat={(string) => string}
+          valueRegex={/^\d{1,}(\.\d{0,8})?$/}
+          defaultValue={0}
+        />
+      ),
     },
     {
       Header: 'Cost',
       accessor: 'cost',
       className: 'table__number-cell user-input',
-      //Cell: ({ value }) => toUSD(value),
-      Cell: EditableCell,
+      Cell: (props) => (
+        <EditableCell
+          {...props}
+          toStoreType={(string) => parseFloat(string)}
+          toDisplayFormat={toUSD}
+          valueRegex={/^\d{1,}(\.\d{0,8})?$/}
+          defaultValue={0}
+        />
+      ),
     },
     {
       Header: 'Fee',
       accessor: 'fee',
       className: 'table__number-cell user-input',
-      // Cell: ({ value }) => {
-      //   if (value === 0) return '-';
-      //   return toUSD(value);
-      // },
-      Cell: EditableCell,
+      Cell: (props) => (
+        <EditableCell
+          {...props}
+          toStoreType={(string) => parseFloat(string)}
+          toDisplayFormat={toUSD}
+          valueRegex={/^\d{1,}(\.\d{0,8})?$/}
+          defaultValue={0}
+        />
+      ),
     },
     {
       Header: 'Total',
@@ -82,10 +175,13 @@ const TradesList = () => {
     setData((prev) =>
       prev.map((row, index) => {
         if (index === rowIndex) {
-          return {
+          const newRow = {
             ...row,
             [columnId]: value,
           };
+          newRow.total = newRow.cost + newRow.fee;
+          newRow.price = newRow.total / newRow.quantity;
+          return newRow;
         }
         return row;
       })
@@ -103,10 +199,30 @@ const TradesList = () => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     tableInstance;
 
+  const onAdd = () => {
+    const tradeData = {
+      tradeDate: addTradeDate.toISOString(),
+      coinId: addTradeCoinId,
+      quantity: addTradeQuantity,
+      cost: addTradeCost,
+      fee: addTradeFee,
+    };
+    console.log(tradeData);
+    dispatch(startAddTrade(tradeData))
+      .then(() => {
+        dispatch(startSetTrades());
+        dispatch(startSetUser());
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const onDelete = (tradeId) => {
     dispatch(startDeleteTrade(tradeId))
       .then(() => {
         dispatch(startSetTrades());
+        dispatch(startSetUser());
       })
       .catch((err) => {
         console.log(err);
@@ -117,21 +233,20 @@ const TradesList = () => {
     dispatch(startEditTrade(tradeId, { coinId, quantity, cost, fee }))
       .then(() => {
         dispatch(startSetTrades());
+        dispatch(startSetUser());
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const setEditing = (row, rowIndex) => {
-    console.log(row);
+  const setEditing = (rowIndex) => {
     const newData = data.map((row, index) => ({
       ...row,
       isEditing: index === rowIndex,
     }));
     setData(newData);
   };
-  const [startDate, setStartDate] = useState(new Date());
 
   return (
     <div className="ui-card">
@@ -139,15 +254,11 @@ const TradesList = () => {
         <span>TRADES LEDGER</span>
       </div>
       <div className="ui-card__content">
-        <DatePicker
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-        />
         <table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
-                <th>Edit</th>
+                <th></th>
                 {headerGroup.headers.map((column) => (
                   <th
                     {...column.getHeaderProps({
@@ -157,11 +268,64 @@ const TradesList = () => {
                     {column.render('Header')}
                   </th>
                 ))}
-                <th>Delete</th>
+                <th></th>
               </tr>
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
+            <tr className={'table__add-trade-row'}>
+              <td></td>
+              <td>
+                <DatePicker
+                  dateFormat={'dd-MM-yyyy'}
+                  selected={addTradeDate}
+                  onChange={onAddTradeDateChange}
+                />
+              </td>
+              <td>
+                <Input
+                  type="text"
+                  placeholder="..."
+                  value={addTradeCoinId}
+                  onChange={onAddTradeCoinIdChange}
+                />
+              </td>
+              <td>
+                <Input
+                  type="text"
+                  placeholder="0"
+                  value={addTradeQuantity}
+                  onChange={onAddTradeQuantityChange}
+                />
+              </td>
+              <td>
+                <Input
+                  type="text"
+                  placeholder="$0.00"
+                  value={addTradeCost}
+                  onChange={onAddTradeCostChange}
+                />
+              </td>
+              <td>
+                <Input
+                  type="text"
+                  placeholder="$0.00"
+                  value={addTradeFee}
+                  onChange={onAddTradeFeeChange}
+                />
+              </td>
+              <td>
+                <span>{addTradeTotal}</span>
+              </td>
+              <td>
+                <span>{addTradePrice}</span>
+              </td>
+              <td className="table__icon-cell">
+                <button className="ui icon button" onClick={onAdd}>
+                  <i className="plus icon"></i>
+                </button>
+              </td>
+            </tr>
             {rows.map((row) => {
               prepareRow(row);
               return (
@@ -185,7 +349,7 @@ const TradesList = () => {
                       <i
                         className={'material-icons md-18'}
                         id="editTrade"
-                        onClick={() => setEditing(row, row.index)}
+                        onClick={() => setEditing(row.index)}
                       >
                         edit
                       </i>

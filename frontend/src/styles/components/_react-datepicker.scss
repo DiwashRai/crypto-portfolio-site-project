@@ -27,3 +27,14 @@
   right: 1rem;
 }
 
+.react-datepicker__input-container input {
+  color: $dark-grey;
+  outline: none;
+}
+
+.table__add-trade-row .react-datepicker__input-container {
+  border: 1px solid rgba(34, 36, 38, 0.15);
+  border-radius: 0.28rem;
+  padding: 0.4rem $s-size;
+}
+

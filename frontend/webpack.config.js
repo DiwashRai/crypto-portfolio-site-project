@@ -21,6 +21,26 @@ module.exports = (env) => {
           exclude: /node_modules/,
         },
         {
+          test: /\.jpe?g$|\.gif$|\.ico$|\.png$|\.svg$/,
+          use: 'file-loader?name=[name].[ext]?[hash]',
+        },
+        {
+          test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+          use: [
+            {
+              loader: 'url-loader',
+              options: {
+                limit: 10000,
+                mimeType: 'application/font-woff',
+              },
+            },
+          ],
+        },
+        {
+          test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+          loader: 'file-loader',
+        },
+        {
           test: /\.s?css$/,
           use: [
             {

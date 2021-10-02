@@ -1,5 +1,5 @@
 export const toUSD = (value) => {
-  return value.toLocaleString('en-US', {
+  return parseFloat(value).toLocaleString('en-US', {
     style: 'currency',
     currency: 'USD',
   });

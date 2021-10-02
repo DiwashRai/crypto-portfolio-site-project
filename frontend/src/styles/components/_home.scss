@@ -6,7 +6,8 @@
 }
 
 .home {
-  h2, h3 {
+  .header {
+    color: $header-grey;
     display: inline-block;
     text-align: center;
   }

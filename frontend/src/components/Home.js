@@ -4,9 +4,9 @@ const Home = () => {
   return (
     <div className="home">
       <div className="content-container">
-        <h2>Manage your Crypto Portfolio</h2>
-        <h3>1) Add your transactions</h3>
-        <h3>2) View your summary</h3>
+        <div className="ui large header">Manage your Crypto Portfolio</div>
+        <div className="ui medium header">1) Add your transactions</div>
+        <div className="ui medium header">2) View your summary</div>
       </div>
     </div>
   );

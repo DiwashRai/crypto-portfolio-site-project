@@ -4,12 +4,18 @@ import { Link } from 'react-router-dom';
 const Header = () => (
   <header className="header">
     <div className="content-container">
-      <h3 className="header__title">
+      <div className="header__title">
         <Link to="/">Coinsensus</Link>
-      </h3>
-      <Link to="/login">Login</Link>
-      <Link to="/dashboard">Dashboard</Link>
-      <Link to="/add">Add</Link>
+      </div>
+      <div className="ui medium header">
+        <Link to="/login">Login</Link>
+      </div>
+      <div className="ui medium header">
+        <Link to="/dashboard">Dashboard</Link>
+      </div>
+      <div className="ui medium header">
+        <Link to="/add">Add</Link>
+      </div>
     </div>
   </header>
 );

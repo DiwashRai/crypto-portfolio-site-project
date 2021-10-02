@@ -29,3 +29,28 @@ button:disabled {
 hr {
   border-top: 1px solid $light-grey;
 }
+
+h1 {
+  font-size: 7rem;
+}
+
+h5 {
+  font-size: 1.4rem;
+}
+
+.ui.huge.header {
+  font-size: $header-font-size-huge;
+}
+
+.ui.large.header, h2 {
+  font-size: $header-font-size-large;
+}
+
+.ui.medium.header, h3 {
+  font-size: $header-font-size-medium;
+}
+
+.ui.small.header, h4 {
+  font-size: $header-font-size-small;
+}
+

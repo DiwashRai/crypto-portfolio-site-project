@@ -1,6 +1,6 @@
 .box-layout {
   align-items: center;
-  background: white;
+  background: $off-white;
   display: flex;
   height: 100vh;
   justify-content: center;
@@ -8,14 +8,3 @@
   width: 100vw;
 }
 
-.box-layout__box {
-  background: white;
-  border: 1px solid black;
-  padding: $l-size $m-size;
-  width: 25rem;
-}
-
-.box-layout__title {
-  margin: 0 0 $m-size 0;
-  line-height: 1;
-}

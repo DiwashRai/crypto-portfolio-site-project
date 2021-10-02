@@ -65,9 +65,9 @@ const TradeForm = (props) => {
       props.onSubmit({
         tradeDate: tradeDate.toISOString(),
         coinId,
-        quantity,
-        cost,
-        fee,
+        quantity: parseFloat(quantity),
+        cost: parseFloat(cost),
+        fee: parseFloat(fee),
       });
     }
   };

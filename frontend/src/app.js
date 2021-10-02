@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 import AppRouter from './routers/AppRouter';
 import configureStore from './store/configureStore';
 import 'normalize.css/normalize.css';
+import 'react-datepicker/dist/react-datepicker.css';
+import 'fomantic-ui-css/semantic.css';
 import './styles/styles.scss';
 
 export const store = configureStore();

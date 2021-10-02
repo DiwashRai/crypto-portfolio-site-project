@@ -8,21 +8,56 @@ const EditableCell = ({
   },
   column: { id },
   updateMyData,
+  toDisplayFormat,
+  toStoreType,
+  valueRegex,
+  defaultValue,
 }) => {
-  const [value, setValue] = useState(initialValue);
+  const [dataValue, setDataValue] = useState(initialValue);
+  const [displayValue, setDisplayValue] = useState(
+    toDisplayFormat(initialValue)
+  );
+
+  const onFocus = () => {
+    setDisplayValue(dataValue);
+  };
 
   const onChange = (e) => {
-    setValue(e.target.value);
+    const value = e.target.value;
+    if (!value || value.match(valueRegex)) {
+      setDisplayValue(e.target.value);
+    }
   };
 
   const onBlur = () => {
-    updateMyData(index, id, value);
+    let newDataValue;
+    if (displayValue) newDataValue = toStoreType(displayValue);
+    else newDataValue = defaultValue;
+    setDataValue(newDataValue);
+    updateMyData(index, id, newDataValue);
+    setDisplayValue(toDisplayFormat(newDataValue));
   };
+
   let jsx;
   if (isEditing) {
-    jsx = <input value={value} onChange={onChange} onBlur={onBlur} />;
+    jsx = (
+      <input
+        value={displayValue}
+        onFocus={onFocus}
+        onChange={onChange}
+        onBlur={onBlur}
+      />
+    );
   } else {
-    jsx = <input value={value} onChange={onChange} onBlur={onBlur} disabled />;
+    jsx = (
+      <input
+        value={displayValue}
+        onFocus={onFocus}
+        onChange={onChange}
+        onBlur={onBlur}
+        disabled
+      />
+    );
   }
 
   return jsx;

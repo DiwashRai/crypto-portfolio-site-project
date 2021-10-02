@@ -32,6 +32,10 @@ th {
   &__number-cell {
     text-align: right;
 
+    & input {
+      text-align: right;
+    }
+
     &--positive {
       color: $positive-green;
     }
@@ -39,6 +43,31 @@ th {
     &--negative {
       color: $negative-red;
     }
+  }
+}
+
+.table__add-trade-row {
+  & td {
+    border-left: none;
+    border-right: none;
+    padding: 0;
+  }
+
+  & .ui.input {
+    width: 100%;
+
+    & input {
+      color: $dark-grey;
+      padding: 0.6rem $s-size;
+      font-family: 'Ubuntu Mono', monospace;
+      font-size: 1.4rem;
+      text-align: right;
+    }
+  }
+
+  & span {
+    padding: 0 $s-size;
+    float: right;
   }
 }
 

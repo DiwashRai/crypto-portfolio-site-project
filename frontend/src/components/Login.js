@@ -23,32 +23,39 @@ const Login = () => {
 
   return (
     <div className="box-layout">
-      <div className="box-layout__box">
-        <h1 className="box-layout__title">Coinsensus</h1>
+      <div className="ui raised segment login">
+        <div className="ui large header">Coinsensus</div>
         <form
-          className="login-form"
+          className="ui form"
           onSubmit={(e) => {
             e.preventDefault();
             dispatch(handleLogin(email, password));
             history.push('/dashboard');
           }}
         >
-          <input
-            type="text"
-            placeholder="Email"
-            className="text-input"
-            autoFocus
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            className="text-input"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button className="button" type="submit">
+          <div className="field">
+            <label>Username</label>
+            <div className="ui input">
+              <input
+                type="text"
+                placeholder="Email"
+                className="text-input"
+                autoFocus
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="ui input">
+            <input
+              type="password"
+              placeholder="Password"
+              className="text-input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <button className="fluid ui button" type="submit">
             Sign in
           </button>
         </form>
