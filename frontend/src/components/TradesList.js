@@ -321,7 +321,7 @@ const TradesList = () => {
                 <span>{addTradePrice}</span>
               </td>
               <td className="table__icon-cell">
-                <button className="ui icon button" onClick={onAdd}>
+                <button className="ui icon button green" onClick={onAdd}>
                   <i className="plus icon"></i>
                 </button>
               </td>

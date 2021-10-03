@@ -13,9 +13,6 @@ const Header = () => (
       <div className="ui medium header">
         <Link to="/dashboard">Dashboard</Link>
       </div>
-      <div className="ui medium header">
-        <Link to="/add">Add</Link>
-      </div>
     </div>
   </header>
 );

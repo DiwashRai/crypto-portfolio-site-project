@@ -35,7 +35,7 @@ const Login = () => {
         >
           <div className="field">
             <label>Username</label>
-            <div className="ui input">
+            <div className="ui left icon input">
               <input
                 type="text"
                 placeholder="Email"
@@ -44,21 +44,29 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
+              <i className="user icon"></i>
             </div>
           </div>
-          <div className="ui input">
-            <input
-              type="password"
-              placeholder="Password"
-              className="text-input"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+          <div className="field">
+            <label>Password</label>
+            <div className="ui left icon input">
+              <input
+                type="password"
+                placeholder="Password"
+                className="text-input"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <i className="lock icon"></i>
+            </div>
           </div>
-          <button className="fluid ui button" type="submit">
+          <button className="fluid ui button green" type="submit">
             Sign in
           </button>
         </form>
+        <p>
+          Need an account? <a>Sign up!</a>
+        </p>
       </div>
     </div>
   );

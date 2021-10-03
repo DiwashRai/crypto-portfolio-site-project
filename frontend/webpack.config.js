@@ -68,7 +68,7 @@ module.exports = (env) => {
         REACT_APP_API_URL: JSON.stringify(
           //'https://diwashrai-crypto-backend.herokuapp.com'
           //'https://coinsensus.app/api'
-          // 'http://62.30.13.3:3000'
+          //'http://62.30.13.3:3000'
           'http://localhost:3000'
         ),
       }),

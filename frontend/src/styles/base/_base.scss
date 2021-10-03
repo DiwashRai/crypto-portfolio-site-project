@@ -8,7 +8,7 @@ html {
   font-size: 62.5%;
 }
 
-body {
+body, {
   font-family: Ubuntu, Arial, sans-serif;
   font-size: $m-size;
   line-height: 1.6;
@@ -34,8 +34,8 @@ h1 {
   font-size: 7rem;
 }
 
-h5 {
-  font-size: 1.4rem;
+h5, .ui.button, .ui.input, p {
+  font-size: $font-size-small;
 }
 
 .ui.huge.header {

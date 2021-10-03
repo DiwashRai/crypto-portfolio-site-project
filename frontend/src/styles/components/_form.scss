@@ -1,7 +1,21 @@
+.ui.raised.segment.login {
+    min-width: 30rem;
+    padding: $l-size;
+
+  & .ui.form {
+    margin-bottom: $l-size;
+  }
+
+  & label, .ui.large.header {
+    color: $dark-grey;
+  }
+}
+
 .ui.form {
   & .field {
-    & label {
+    &>label {
       font-size: $font-size-small;
+      text-align: left;
     }
   }
 }
