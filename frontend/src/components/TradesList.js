@@ -4,6 +4,7 @@ import { selectTrades } from '../reducers/tradesReducer';
 import { useTable } from 'react-table';
 import { parseISO } from 'date-fns';
 import { toUSD } from '../helpers/formatting';
+import { regex } from '../helpers/constants';
 import { Input } from 'semantic-ui-react';
 import EditableCell from './EditableCell';
 import DatePicker from 'react-datepicker';
@@ -36,28 +37,28 @@ const TradesList = () => {
 
   const onAddTradeCoinIdChange = (e) => {
     const coinId = e.target.value;
-    if (!coinId || coinId.match(/^[a-z]+$/)) {
+    if (!coinId || coinId.match(regex.coinId)) {
       setAddTradeCoinId(coinId);
     }
   };
 
   const onAddTradeQuantityChange = (e) => {
     const quantity = e.target.value;
-    if (!quantity || quantity.match(/^\d{1,}(\.\d{0,8})?$/)) {
+    if (!quantity || quantity.match(regex.quantity)) {
       setAddTradeQuantity(e.target.value);
     }
   };
 
   const onAddTradeCostChange = (e) => {
     const cost = e.target.value;
-    if (!cost || cost.match(/^\d{1,}(\.\d{0,8})?$/)) {
+    if (!cost || cost.match(regex.currency)) {
       setAddTradeCost(cost);
     }
   };
 
   const onAddTradeFeeChange = (e) => {
     const fee = e.target.value;
-    if (!fee || fee.match(/^\d{1,}(\.\d{0,8})?$/)) {
+    if (!fee || fee.match(regex.currency)) {
       setAddTradeFee(fee);
     }
   };
@@ -110,7 +111,7 @@ const TradesList = () => {
           {...props}
           toStoreType={(string) => string}
           toDisplayFormat={(string) => string}
-          valueRegex={/^[a-z]+$/}
+          valueRegex={regex.coinId}
           defaultValue={'...'}
         />
       ),
@@ -124,7 +125,7 @@ const TradesList = () => {
           {...props}
           toStoreType={(string) => parseFloat(string)}
           toDisplayFormat={(string) => string}
-          valueRegex={/^\d{1,}(\.\d{0,8})?$/}
+          valueRegex={regex.quantity}
           defaultValue={0}
         />
       ),
@@ -138,7 +139,7 @@ const TradesList = () => {
           {...props}
           toStoreType={(string) => parseFloat(string)}
           toDisplayFormat={toUSD}
-          valueRegex={/^\d{1,}(\.\d{0,8})?$/}
+          valueRegex={regex.currency}
           defaultValue={0}
         />
       ),
@@ -152,7 +153,7 @@ const TradesList = () => {
           {...props}
           toStoreType={(string) => parseFloat(string)}
           toDisplayFormat={toUSD}
-          valueRegex={/^\d{1,}(\.\d{0,8})?$/}
+          valueRegex={regex.currency}
           defaultValue={0}
         />
       ),
