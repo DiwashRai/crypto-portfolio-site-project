@@ -1,5 +1,6 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import authenticationReducer from '../reducers/authenticationReducer';
+import marketDataReducer from '../reducers/marketDataReducer';
 import pricesReducer from '../reducers/pricesReducer';
 import tradesReducer from '../reducers/tradesReducer';
 import userReducer from '../reducers/userReducer';
@@ -12,6 +13,7 @@ export default () => {
   const store = createStore(
     combineReducers({
       authentication: authenticationReducer,
+      marketData: marketDataReducer,
       prices: pricesReducer,
       trades: tradesReducer,
       user: userReducer,
