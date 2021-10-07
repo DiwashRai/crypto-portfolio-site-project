@@ -5,6 +5,7 @@ import { startSetMarketData } from '../actions/marketDataActions';
 import { startSetPrices } from '../actions/pricesActions';
 import { startSetTrades } from '../actions/tradesActions';
 import ReturnSummary from './ReturnSummary';
+import MarketTopList from './MarketTopList';
 import CryptoOverview from './CryptoOverview';
 import TradesList from './TradesList';
 
@@ -31,6 +32,7 @@ const Dashboard = () => {
     <div className="dashboard">
       <div className="dashboard__left-side">
         <ReturnSummary />
+        <MarketTopList />
       </div>
       <div className="dashboard__center">
         <CryptoOverview />
