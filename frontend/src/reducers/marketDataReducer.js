@@ -1,4 +1,4 @@
-export default (state = {}, action) => {
+export default (state = [], action) => {
   switch (action.type) {
     case 'SET_MARKET_DATA':
       return action.marketData;
@@ -6,3 +6,5 @@ export default (state = {}, action) => {
       return state;
   }
 };
+
+export const selectMarketData = (state) => state.marketData;
