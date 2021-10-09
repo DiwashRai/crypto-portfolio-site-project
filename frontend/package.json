@@ -8,7 +8,9 @@
     "serve": "live-server public",
     "build:dev": "webpack",
     "build:prod": "webpack --env production",
-    "dev-server": "webpack-dev-server --mode=development"
+    "dev-server": "webpack-dev-server --mode=development",
+    "json": "webpack --json > stats.json",
+    "analyse": "webpack-bundle-analyzer stats.json"
   },
   "dependencies": {
     "axios": "^0.21.4",
@@ -48,6 +50,7 @@
     "webpack-dev-server": "^4.0.0"
   },
   "devDependencies": {
+    "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^4.8.0"
   }
 }

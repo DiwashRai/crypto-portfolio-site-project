@@ -1,6 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const BundleAnalyzerPlugin =
+  require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = (env) => {
   const isProduction = env.production;
@@ -64,6 +66,7 @@ module.exports = (env) => {
     },
     plugins: [
       CSSExtract,
+      new BundleAnalyzerPlugin(),
       new webpack.DefinePlugin({
         REACT_APP_API_URL: JSON.stringify(
           //'https://diwashrai-crypto-backend.herokuapp.com'
