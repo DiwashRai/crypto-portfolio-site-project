@@ -5,12 +5,12 @@
   "author": "Diwash Rai",
   "license": "MIT",
   "scripts": {
-    "serve": "live-server public",
     "build:dev": "webpack",
     "build:prod": "webpack --env production",
     "dev-server": "webpack-dev-server --mode=development",
     "json": "webpack --json > stats.json",
-    "analyse": "webpack-bundle-analyzer stats.json"
+    "analyse": "webpack-bundle-analyzer stats.json",
+    "postbuild": "purgecss --css public/dist/*.css --content public/index.html public/dist/*.js --output public/dist"
   },
   "dependencies": {
     "axios": "^0.21.4",
@@ -25,9 +25,7 @@
     "date-fns": "^2.24.0",
     "file-loader": "^6.2.0",
     "fomantic-ui-css": "^2.8.8",
-    "live-server": "^1.2.1",
     "mini-css-extract-plugin": "^2.3.0",
-    "moment": "^2.29.1",
     "node-sass": "^6.0.1",
     "normalize.css": "^8.0.1",
     "react": "^17.0.2",
@@ -50,6 +48,7 @@
     "webpack-dev-server": "^4.0.0"
   },
   "devDependencies": {
+    "purgecss-webpack-plugin": "^4.0.3",
     "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^4.8.0"
   }

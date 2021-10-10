@@ -1,8 +1,10 @@
 const path = require('path');
+const glob = require('glob');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const BundleAnalyzerPlugin =
-  require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const PurgeCSSPlugin = require('purgecss-webpack-plugin');
+//const BundleAnalyzerPlugin =
+//  require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = (env) => {
   const isProduction = env.production;
@@ -66,7 +68,12 @@ module.exports = (env) => {
     },
     plugins: [
       CSSExtract,
-      new BundleAnalyzerPlugin(),
+      //new BundleAnalyzerPlugin(),
+      new PurgeCSSPlugin({
+        paths: glob.sync(`${path.join(__dirname, 'public', 'dist')}/*`, {
+          nodir: true,
+        }),
+      }),
       new webpack.DefinePlugin({
         REACT_APP_API_URL: JSON.stringify(
           //'https://diwashrai-crypto-backend.herokuapp.com'
