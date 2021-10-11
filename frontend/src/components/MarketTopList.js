@@ -14,7 +14,7 @@ const MarketTopList = () => {
         {marketData &&
           marketData.map((row) => (
             <div>
-              <img src={row.image} height="20" width="20" />
+              <img src={row.image} height="20" />
               <span> {row.symbol.toUpperCase()}</span>
               <hr />
             </div>
