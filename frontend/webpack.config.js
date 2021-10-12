@@ -69,11 +69,11 @@ module.exports = (env) => {
     plugins: [
       CSSExtract,
       //new BundleAnalyzerPlugin(),
-      new PurgeCSSPlugin({
-        paths: glob.sync(`${path.join(__dirname, 'public', 'dist')}/*`, {
-          nodir: true,
-        }),
-      }),
+      //new PurgeCSSPlugin({
+      //  paths: glob.sync(`${path.join(__dirname, 'public', 'dist')}/*`, {
+      //    nodir: true,
+      //  }),
+      //}),
       new webpack.DefinePlugin({
         REACT_APP_API_URL: JSON.stringify(
           //'https://diwashrai-crypto-backend.herokuapp.com'

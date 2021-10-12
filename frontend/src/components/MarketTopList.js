@@ -13,7 +13,7 @@ const MarketTopList = () => {
       <div className="ui-card__content">
         {marketData &&
           marketData.map((row) => (
-            <div>
+            <div className="market-data-row">
               <img src={row.image} height="20" />
               <span> {row.symbol.toUpperCase()}</span>
               <hr />
