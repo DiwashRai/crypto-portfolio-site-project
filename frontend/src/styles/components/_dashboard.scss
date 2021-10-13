@@ -7,6 +7,7 @@
 
   &__left-side {
     margin: 0 $m-size 0 0;
+    max-width: $dashboard-left-max-width;
   }
 
   &__center {
