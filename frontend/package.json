@@ -44,12 +44,12 @@
     "semantic-ui-react": "^2.0.4",
     "style-loader": "^3.2.1",
     "url-loader": "^4.1.1",
-    "webpack": "^5.51.1",
+    "webpack": "^5.59.1",
     "webpack-dev-server": "^4.0.0"
   },
   "devDependencies": {
     "purgecss-webpack-plugin": "^4.0.3",
     "webpack-bundle-analyzer": "^4.4.2",
-    "webpack-cli": "^4.8.0"
+    "webpack-cli": "^4.9.1"
   }
 }

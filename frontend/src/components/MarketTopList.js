@@ -13,7 +13,7 @@ const MarketTopList = () => {
       </div>
       <div className="ui-card__content">
         {marketData &&
-          marketData.map((row) => (
+          marketData.slice(0, 10).map((row) => (
             <div className="market-data-row">
               <div>
                 <img src={row.image} height="30" />
@@ -24,9 +24,15 @@ const MarketTopList = () => {
               <div>
                 <span> {'$' + row.current_price}</span>
               </div>
-              <Sparklines data={row.sparkline_in_7d.price}>
-                <SparklinesLine color="blue" />
-              </Sparklines>
+              <div className="chart">
+                <Sparklines
+                  data={row.sparkline_in_7d.price}
+                  svgHeight={50}
+                  svgWidth={120}
+                >
+                  <SparklinesLine color="blue" />
+                </Sparklines>
+              </div>
             </div>
           ))}
       </div>
