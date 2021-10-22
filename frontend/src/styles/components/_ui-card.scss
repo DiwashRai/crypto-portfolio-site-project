@@ -28,8 +28,12 @@
   border-bottom: 1px solid $ui-card-line;
   display: flex;
 
-  & div {
+  &>div {
     margin: 0 $s-size;
+
+    .market-data-row__text {
+      background: blue;
+    }
   }
 
   & .chart {

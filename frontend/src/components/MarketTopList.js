@@ -19,10 +19,16 @@ const MarketTopList = () => {
                 <img src={row.image} height="30" />
               </div>
               <div>
-                <span> {row.symbol.toUpperCase()}</span>
+                <div className="market-data-row__text">
+                  {' '}
+                  {row.symbol.toUpperCase()}
+                </div>
               </div>
               <div>
-                <span> {'$' + row.current_price}</span>
+                <div className="market-data-row__text">
+                  {' '}
+                  {'$' + row.current_price}
+                </div>
               </div>
               <div className="chart">
                 <Sparklines
