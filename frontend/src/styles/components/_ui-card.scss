@@ -29,11 +29,10 @@
   display: flex;
 
   &>div {
+    align-items: center;
+    display: flex;
+    justify-content: center;
     margin: 0 $s-size;
-
-    .market-data-row__text {
-      background: blue;
-    }
   }
 
   & .chart {
