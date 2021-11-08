@@ -22,9 +22,9 @@ AuthRouter.post('/auth/token/refresh', async (req, res) => {
       res.status(200).send({ accessToken });
       return;
     }
-    res.status(401).send({ error: 'Please authenticate.' });
+    res.status(400).send();
   } catch (err) {
-    res.status(401).send({ error: 'Please authenticate.' });
+    res.status(400).send();
   }
 });
 
